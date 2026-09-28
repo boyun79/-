@@ -30,6 +30,20 @@ PHYSICS_HELP = {
     "안정성": ("차의 움직임을 예측하기 쉬운 정도", "차가 갑자기 미끄러지거나 흔들리지 않고 운전자의 조작에 일정하게 반응하는 정도예요."),
 }
 
+# 파츠 이름 위에 마우스를 올렸을 때 보여 줄 초보자용 역할 설명입니다.
+PART_HELP = {
+    "front_wing": ("앞 타이어의 공기 흐름을 조절하고 다운포스를 만드는 부품", "차량 앞쪽에서 공기의 흐름을 나누고 앞 타이어를 트랙 쪽으로 눌러요. 코너 진입 성능에 큰 영향을 줍니다."),
+    "rear_wing": ("차량 뒤쪽의 다운포스와 공기저항을 조절하는 부품", "뒤쪽을 트랙에 눌러 빠른 코너를 안정적으로 돌게 해요. 크게 세우면 코너에는 좋지만 직선 속도는 낮아질 수 있습니다."),
+    "tyres": ("트랙과 직접 맞닿아 차량의 그립을 만드는 부품", "엔진과 브레이크의 힘을 실제 노면에 전달해요. 고무 성질에 따라 접지력과 안정성이 달라집니다."),
+    "brakes": ("속도를 줄여 원하는 지점에서 코너에 진입하게 하는 부품", "회전하는 바퀴에 마찰을 만들어 운동 에너지를 열로 바꾸고 차량을 감속시킵니다."),
+    "suspension": ("바퀴가 노면을 따라가도록 차체와 연결하는 부품", "노면 충격을 받아들이고 타이어가 트랙에서 떨어지지 않도록 도와 그립과 반응성을 조절합니다."),
+    "floor": ("차량 밑의 빠른 공기로 다운포스를 만드는 넓은 바닥", "차 아래 공기의 속도와 압력을 조절해 큰 공기역학적 힘을 만듭니다."),
+    "diffuser": ("차량 밑 공기를 뒤쪽에서 부드럽게 넓혀 주는 부품", "바닥을 빠져나온 공기를 확산시켜 플로어가 안정적으로 다운포스를 만들도록 돕습니다."),
+    "engine": ("연료의 에너지를 바퀴를 움직이는 힘으로 바꾸는 장치", "출력이 높으면 가속과 직선 속도가 좋아지지만 열과 신뢰성 관리가 더 중요해집니다."),
+    "ers": ("제동 에너지를 전기로 저장했다가 가속에 사용하는 장치", "버려질 에너지 일부를 회수해 저장하고 필요할 때 모터의 추가 힘으로 사용합니다."),
+}
+
+
 
 def make_option(label, scores, stars, color, explanation, shape=1.0):
     """모든 옵션을 같은 구조로 저장해 새 파츠 추가를 쉽게 합니다."""
@@ -131,6 +145,8 @@ def apply_game_css():
     .up{color:#37eca0}.down{color:#ff5872}.same{color:#6e7b89}.why{margin:12px 0;padding:11px;border-left:3px solid #27d6ff;background:#0c131b;color:#c9d4de;font-size:12px;line-height:1.55}
     .option-card{border:1px solid #2a3542;background:#0d1219;padding:10px;margin:7px 0}.option-title{font:700 13px 'Oxanium';color:#fff}.stars{color:#ffc52e;letter-spacing:1px;font-size:12px}.option-mini{font-size:10px;color:#8491a0;margin-top:6px}
     .selected-option{border-color:#ff3158;box-shadow:inset 3px 0 #ff3158}.footnote{color:#718090;font-size:10px;margin-top:12px;line-height:1.5}
+    .part-role{padding:10px 12px;margin:0 0 11px;background:#0c131b;border-left:3px solid var(--cyan);color:#d3dde6;font-size:12px;line-height:1.55}.part-role b{font:700 15px 'Oxanium';color:#fff}.part-role span{color:#91a0af}
+    .preview-shell{border:1px solid #2b3744;background:linear-gradient(135deg,#101821,#080c11);margin-top:10px;box-shadow:0 12px 35px #0006}.preview-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #283441}.preview-title{font:700 12px 'Oxanium';letter-spacing:2px}.preview-current{font:700 12px 'Oxanium';color:#ffbd32}.proscons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.pros,.cons{padding:10px;background:#0c1218;border:1px solid #26313d;font-size:11px;line-height:1.7}.pros b{color:#37eca0}.cons b{color:#ff7387}.change-table{margin:10px 0;border:1px solid #293542;background:#0b1016}.change-row{display:grid;grid-template-columns:1.35fr .8fr .8fr .65fr;padding:7px 9px;border-bottom:1px solid #202a34;font:600 11px 'Oxanium'}.change-row:last-child{border-bottom:0}.result-line{padding:12px;background:linear-gradient(90deg,#17251f,#10161d);border:1px solid #2b5947;color:#d8f7e9;font-size:12px;line-height:1.6}.flow-arrow{text-align:center;color:#27d6ff;font:700 18px 'Oxanium';margin:-3px 0 1px}
     @media(max-width:1000px){.intro{flex-wrap:wrap}.block-container{padding:.6rem}.garage-head{position:static}}
     </style>""", unsafe_allow_html=True)
 
@@ -155,8 +171,8 @@ def build_3d_html(parts, selections, active_part):
     #badge{{position:absolute;right:18px;top:16px;color:#7f8c9a;font:11px monospace;letter-spacing:1px}}
     #info{{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);min-width:300px;text-align:center;background:#070a0edb;border:1px solid #354251;border-top:2px solid #27d6ff;color:#fff;padding:9px 14px;opacity:0;transition:.15s;pointer-events:none}}
     #info b{{font-size:13px;letter-spacing:1px}}#info span{{display:block;color:#aab5c1;font-size:10px;margin-top:3px}}
-    .label{{color:#dce6ef;background:#080b10d9;border:1px solid #3b4856;padding:4px 7px;font:bold 9px Arial;letter-spacing:.8px;white-space:nowrap;pointer-events:none}}
-    .label.active{{color:#fff;border-color:#ff3158;box-shadow:0 0 12px #ff315888}}
+    .label{{color:#dce6ef;position:relative;background:#080b10d9;border:1px solid #3b4856;padding:4px 7px;font:bold 9px Arial;letter-spacing:.8px;white-space:nowrap;pointer-events:none}}
+    .label:after{{content:'';position:absolute;width:28px;height:1px;background:#708090;left:50%;top:100%;transform:rotate(55deg);transform-origin:left}}.label.active{{color:#fff;border-color:#ff3158;box-shadow:0 0 12px #ff315888}}
     </style><script type='importmap'>{{"imports":{{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}}}</script></head>
     <body><div id='app'></div><div id='hint'>DRAG 회전 · WHEEL 확대/축소 · PART 클릭</div><div id='badge'>REAL-TIME 3D / WEBGL</div><div id='info'></div>
     <script type='module'>
@@ -198,12 +214,15 @@ def build_3d_html(parts, selections, active_part):
     const suspension=group('suspension');[1.95,-2.15].forEach(z=>[-1,1].forEach(s=>{{mesh(suspension,new THREE.CylinderGeometry(.025,.025,1.35,8),mat(cfg.suspension.color,.8,.2),[s*.82,-.34,z],[0,0,s*.85])}}));
     const engine=group('engine');mesh(engine,new THREE.CapsuleGeometry(.42,1.2,8,18),mat(cfg.engine.color,.65,.24),[0,.22,-1.75],[Math.PI/2,0,0]);
     const ers=group('ers');mesh(ers,new THREE.TorusGeometry(.24,.055,10,28),mat(cfg.ers.color,.5,.15),[0,.68,-1.38],[Math.PI/2,0,0]);
+    const descriptions={{frontWing:'앞 타이어를 눌러 코너 진입을 돕는 공기역학 부품',rearWing:'차 뒤를 눌러 코너 안정성을 만드는 부품',tyres:'트랙과 직접 맞닿아 그립을 만드는 부품',brakes:'마찰로 차량의 속도를 줄이는 부품',suspension:'바퀴가 노면을 따라가도록 돕는 부품',floor:'차 밑 공기로 다운포스를 만드는 바닥',diffuser:'바닥 공기를 뒤에서 부드럽게 확산하는 부품',engine:'차량을 앞으로 움직이는 동력을 만드는 장치',ers:'에너지를 저장했다가 가속에 사용하는 장치'}};
     const names={{frontWing:'FRONT WING',rearWing:'REAR WING',tyres:'TYRES',brakes:'BRAKES',suspension:'SUSPENSION',floor:'FLOOR',diffuser:'DIFFUSER',engine:'ENGINE',ers:'ERS',cockpit:'COCKPIT',sidepods:'SIDEPOD'}};
     const labelPos={{frontWing:[0,.15,3.65],rearWing:[0,1.65,-3.15],tyres:[-2.2,.4,1.9],floor:[1.6,-.6,.1],diffuser:[1.4,.1,-3],engine:[0,1.2,-1.7],ers:[.8,1,-1.2],cockpit:[0,1.7,.1],sidepods:[1.65,.55,-.45]}};
     Object.entries(labelPos).forEach(([n,p])=>{{const d=document.createElement('div');d.className='label'+(cfg[n]?.key===active?' active':'');d.textContent=names[n];const l=new CSS2DObject(d);l.position.set(...p);partGroups[n]?.add(l)}});
+    // 왼쪽에서 선택한 파츠는 차량에서도 계속 빛나도록 해 프리뷰와 위치를 연결합니다.
+    const active3d=Object.keys(cfg).find(n=>cfg[n]?.key===active);if(active3d&&partGroups[active3d]){{partGroups[active3d].traverse(o=>{{if(o.isMesh){{o.material=o.material.clone();o.material.emissive?.setHex(0x36566b);o.material.emissiveIntensity=1.1}}}})}}
     const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(),info=document.getElementById('info');let hovered=null;
     function hit(e){{const rect=renderer.domElement.getBoundingClientRect();mouse.x=((e.clientX-rect.left)/rect.width)*2-1;mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;ray.setFromCamera(mouse,camera);return ray.intersectObjects(pickable,false)[0]?.object||null}}
-    renderer.domElement.addEventListener('pointermove',e=>{{const obj=hit(e);pickable.forEach(m=>m.material.emissive?.setHex(0));if(obj){{obj.material.emissive?.setHex(0x243344);hovered=obj.userData.part;renderer.domElement.style.cursor='pointer';info.style.opacity=1;info.innerHTML='<b>'+names[hovered]+'</b><span>클릭하면 설정 패널이 열립니다</span>'}}else{{hovered=null;renderer.domElement.style.cursor='grab';info.style.opacity=0}}}});
+    renderer.domElement.addEventListener('pointermove',e=>{{const obj=hit(e);pickable.forEach(m=>m.material.emissive?.setHex(0));if(obj){{obj.material.emissive?.setHex(0x243344);hovered=obj.userData.part;renderer.domElement.style.cursor='pointer';info.style.opacity=1;info.innerHTML='<b>'+names[hovered]+'</b><span>'+(descriptions[hovered]||'클릭하면 설정 패널이 열립니다')+'</span>'}}else{{hovered=null;renderer.domElement.style.cursor='grab';info.style.opacity=0}}}});
     renderer.domElement.addEventListener('click',()=>{{const key=cfg[hovered]?.key;if(key){{const u=new URL(window.parent.location.href);u.searchParams.set('part',key);window.parent.location.href=u.toString()}}}});
     window.addEventListener('resize',()=>{{camera.aspect=app.clientWidth/app.clientHeight;camera.updateProjectionMatrix();renderer.setSize(app.clientWidth,app.clientHeight);labels.setSize(app.clientWidth,app.clientHeight)}});
     function animate(){{requestAnimationFrame(animate);controls.update();renderer.render(scene,camera);labels.render(scene,camera)}}animate();
@@ -212,8 +231,100 @@ def build_3d_html(parts, selections, active_part):
 
 def render_3d_car(parts, selections, active_part):
     """중앙의 가장 큰 영역에 실제 WebGL 3D 뷰어를 삽입합니다."""
-    components.html(build_3d_html(parts, selections, active_part), height=650, scrolling=False)
+    components.html(build_3d_html(parts, selections, active_part), height=540, scrolling=False)
 
+
+
+def build_part_preview_html(parts, selections, active_part):
+    """선택한 파츠만 확대해 보여 주는 별도의 회전 가능한 3D 프리뷰를 만듭니다."""
+    data = parts[active_part]
+    option = data["options"][selections[active_part]]
+    cfg = json.dumps({"part": active_part, "color": option["color"], "shape": option["shape"]})
+    return f"""<!doctype html><html><head><style>*{{box-sizing:border-box}}html,body,#p{{margin:0;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle,#24313d,#090d12 70%)}}canvas{{display:block}}#tag{{position:absolute;left:14px;bottom:10px;color:#8d9baa;font:10px Arial;letter-spacing:1px}}</style><script type='importmap'>{{"imports":{{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}}}</script></head><body><div id='p'></div><div id='tag'>DRAG TO INSPECT · 3D PART MODEL</div><script type='module'>
+    import * as THREE from 'three';import {{OrbitControls}} from 'three/addons/controls/OrbitControls.js';
+    const cfg={cfg},root=document.getElementById('p'),scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,root.clientWidth/root.clientHeight,.1,50);camera.position.set(4,2.6,5.5);
+    const renderer=new THREE.WebGLRenderer({{antialias:true,alpha:true}});renderer.setSize(root.clientWidth,root.clientHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;root.appendChild(renderer.domElement);
+    const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.autoRotate=true;controls.autoRotateSpeed=.8;controls.minDistance=3.5;controls.maxDistance=10;
+    scene.add(new THREE.HemisphereLight(0xcce6ff,0x111111,2.7));const light=new THREE.DirectionalLight(0xffffff,4);light.position.set(4,6,3);scene.add(light);const rim=new THREE.PointLight(0x27d6ff,35,15);rim.position.set(-4,2,-2);scene.add(rim);
+    const g=new THREE.Group();scene.add(g);const m=new THREE.MeshStandardMaterial({{color:cfg.color,metalness:.7,roughness:.22,emissive:0x101820}}),dark=new THREE.MeshStandardMaterial({{color:0x090b0e,roughness:.65}});
+    function add(geo,pos=[0,0,0],rot=[0,0,0],mat=m){{const o=new THREE.Mesh(geo,mat);o.position.set(...pos);o.rotation.set(...rot);o.castShadow=true;g.add(o)}}
+    const cap=(r,l)=>new THREE.CapsuleGeometry(r,l,8,28),s=cfg.shape;
+    if(cfg.part==='front_wing'){{[-.22,.18].forEach((y,i)=>add(cap(.13,3.5*s),[0,y,-i*.4],[0,0,Math.PI/2]));[-1,1].forEach(x=>add(new THREE.BoxGeometry(.08,.72,.75),[x*1.85*s,0,.05]))}}
+    else if(cfg.part==='rear_wing'){{add(cap(.19,3*s),[0,.65,0],[0,0,Math.PI/2]);add(cap(.11,2.8*s),[0,.12,.18],[0,0,Math.PI/2]);[-1,1].forEach(x=>add(new THREE.BoxGeometry(.1,1.5,.18),[x*1.15*s,-.25,.1]))}}
+    else if(cfg.part==='tyres'){{add(new THREE.TorusGeometry(1.05,.42,24,64),[0,0,0],[0,Math.PI/2,0],dark);add(new THREE.TorusGeometry(1.04,.06,10,64),[0,0,0],[0,Math.PI/2,0],m)}}
+    else if(cfg.part==='brakes'){{add(new THREE.CylinderGeometry(1,1,.18,48),[0,0,0],[0,0,Math.PI/2]);add(new THREE.BoxGeometry(.35,1.05,.45),[0,.25,.72])}}
+    else if(cfg.part==='suspension'){{[-.7,0,.7].forEach((x,i)=>add(new THREE.CylinderGeometry(.06,.06,3.2,12),[x,0,0],[0,0,(i-1)*.48]));add(new THREE.CylinderGeometry(.35,.35,2.1,24),[0,0,0])}}
+    else if(cfg.part==='floor'){{const sh=new THREE.Shape().moveTo(-1.7,-2).lineTo(-1.25,2).lineTo(1.25,2).lineTo(1.7,-2).lineTo(-1.7,-2);add(new THREE.ExtrudeGeometry(sh,{{depth:.12,bevelEnabled:true,bevelSize:.06,bevelThickness:.05}}),[0,0,0],[Math.PI/2,0,0])}}
+    else if(cfg.part==='diffuser'){{[-1.2,-.4,.4,1.2].forEach(x=>add(new THREE.BoxGeometry(.08,1.2,2.4*s),[x,0,0],[.35,0,0]));add(new THREE.BoxGeometry(3.1,.12,2.2*s),[0,-.55,0],[.2,0,0])}}
+    else if(cfg.part==='engine'){{add(cap(.75,2.4),[0,0,0],[Math.PI/2,0,0]);[-1,1].forEach(x=>add(new THREE.CylinderGeometry(.3,.45,1.4,24),[x*.82,0,0],[Math.PI/2,0,0]))}}
+    else{{add(new THREE.TorusGeometry(1.1,.22,20,64));add(new THREE.CylinderGeometry(.18,.18,2.5,18),[0,0,0],[0,0,Math.PI/2])}}
+    const ground=new THREE.Mesh(new THREE.CircleGeometry(4,64),new THREE.MeshStandardMaterial({{color:0x10161c,metalness:.5,roughness:.5}}));ground.rotation.x=-Math.PI/2;ground.position.y=-1.5;scene.add(ground);
+    function tick(){{requestAnimationFrame(tick);controls.update();renderer.render(scene,camera)}}tick();window.addEventListener('resize',()=>{{camera.aspect=root.clientWidth/root.clientHeight;camera.updateProjectionMatrix();renderer.setSize(root.clientWidth,root.clientHeight)}});
+    </script></body></html>"""
+
+
+def render_part_description(active_part, parts):
+    """파츠가 무슨 일을 하는지 선택 즉시 한 문장과 툴팁으로 알려 줍니다."""
+    short, detail = PART_HELP[active_part]
+    name = parts[active_part]["name"].upper()
+    st.markdown(f"<div class='part-role' title='{html.escape(detail, quote=True)}'><b>{name}</b><br>{html.escape(short)} <span>ⓘ 마우스를 올려 자세히 보기</span></div>", unsafe_allow_html=True)
+
+
+def render_selected_part_preview(parts, selections, active_part):
+    """차량 바로 아래에 현재 파츠의 실제 3D 형태를 확대해 연결된 학습 흐름을 만듭니다."""
+    data, option = parts[active_part], parts[active_part]["options"][selections[active_part]]
+    st.markdown(f"<div class='flow-arrow'>↓ SELECTED PART ↓</div><div class='preview-shell'><div class='preview-head'><span class='preview-title'>{data['name'].upper()}</span><span class='preview-current'>현재 선택 · {option['label']}</span></div></div>", unsafe_allow_html=True)
+    components.html(build_part_preview_html(parts, selections, active_part), height=265, scrolling=False)
+    render_part_description(active_part, parts)
+
+
+def generate_part_advantages(option):
+    """균형 점수 75보다 높은 항목을 찾아 숫자 없이도 보이는 장점 목록을 만듭니다."""
+    pairs = sorted(zip(METRICS, option["scores"]), key=lambda item: item[1], reverse=True)
+    return [f"✓ {name} ↑" for name, score in pairs if score >= 82][:3] or ["✓ 균형 잡힌 성능"]
+
+
+def generate_part_disadvantages(option):
+    """점수가 낮은 항목을 찾아 선택에 따른 대가를 쉬운 단점 목록으로 만듭니다."""
+    pairs = sorted(zip(METRICS, option["scores"]), key=lambda item: item[1])
+    return [f"△ {name} ↓" for name, score in pairs if score <= 72][:3] or ["△ 뚜렷한 약점이 적음"]
+
+
+def generate_change_explanation(changed_part, parts, selections, differences):
+    """숫자 변화가 실제 주행에서 무엇을 뜻하는지 한 문장으로 연결합니다."""
+    if not changed_part:
+        return "파츠 옵션을 장착하면 여기에서 실제 주행 변화와 그 이유를 한 문장으로 알려드려요."
+    option = parts[changed_part]["options"][selections[changed_part]]
+    up = [m for m, d in differences.items() if d > 0]
+    down = [m for m, d in differences.items() if d < 0]
+    result = option["explanation"]
+    if up:
+        result += f" 그래서 {', '.join(up)} 성능이 좋아졌어요."
+    if down:
+        result += f" 대신 {', '.join(down)} 성능은 조금 줄었어요."
+    return result
+
+
+def render_change_summary(current, previous, differences, changed_part, parts, selections):
+    """변경 전 숫자 → 변경 후 숫자 → 주행 결과를 한 흐름으로 보여 줍니다."""
+    if not changed_part or previous is None:
+        return
+    rows = ""
+    for metric in METRICS:
+        d = differences[metric]
+        if d:
+            klass, arrow = ("up", "↑") if d > 0 else ("down", "↓")
+            rows += f"<div class='change-row'><span>{METRIC_ENGLISH[metric]}</span><span>{previous[metric]}</span><span>{current[metric]}</span><span class='{klass}'>{arrow}{abs(d)}</span></div>"
+    explanation = generate_change_explanation(changed_part, parts, selections, differences)
+    st.markdown(f"<div class='section-label'>{parts[changed_part]['name'].upper()} 변경 결과</div><div class='change-table'><div class='change-row'><span>성능</span><span>BEFORE</span><span>AFTER</span><span>CHANGE</span></div>{rows}</div><div class='result-line'>💡 <b>어떤 변화가 생겼나요?</b><br>{html.escape(explanation)}</div>", unsafe_allow_html=True)
+
+
+def render_advantages_and_disadvantages(parts, active_part, selections):
+    """현재 옵션의 장단점을 체크와 삼각형 표시로 빠르게 비교하게 합니다."""
+    option = parts[active_part]["options"][selections[active_part]]
+    pros = "<br>".join(generate_part_advantages(option))
+    cons = "<br>".join(generate_part_disadvantages(option))
+    st.markdown(f"<div class='proscons'><div class='pros'><b>장점</b><br>{pros}</div><div class='cons'><b>단점</b><br>{cons}</div></div>", unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
 # 5. 게임 조작 패널
@@ -227,7 +338,7 @@ def render_part_menu(parts, active_part):
     """왼쪽에 파츠만 크게 표시하고, 클릭한 파츠를 활성화합니다."""
     st.markdown("<div class='section-label'>01 / PARTS</div>", unsafe_allow_html=True)
     for key, data in parts.items():
-        if st.button(f"{data['icon']}   {data['name']}", key=f"menu_{key}", use_container_width=True):
+        if st.button(f"{data['icon']}   {data['name']}", key=f"menu_{key}", use_container_width=True, help=PART_HELP[key][1]):
             st.session_state.active_part = key
             st.query_params["part"] = key
             st.rerun()
@@ -253,6 +364,7 @@ def render_part_detail(parts, active_part, selections):
             st.session_state.last_changed_part = active_part
             st.rerun()
 
+    render_advantages_and_disadvantages(parts, active_part, selections)
 
 def render_physics_tooltip(metric):
     """브라우저 기본 툴팁을 이용해 추가 라이브러리 없이 물리 설명을 제공합니다."""
@@ -260,7 +372,7 @@ def render_physics_tooltip(metric):
     return f"<span title='{html.escape(long_text, quote=True)}' style='cursor:help'>{html.escape(short)} ⓘ</span>"
 
 
-def render_performance_panel(performance, differences, changed_part, parts, selections):
+def render_performance_panel(performance, previous_performance, differences, changed_part, parts, selections):
     """오른쪽에는 핵심 성능만 크게 표시하고 변화 방향을 색으로 강조합니다."""
     st.markdown("<div class='section-label'>02 / CAR PERFORMANCE</div>", unsafe_allow_html=True)
     for metric in METRICS:
@@ -275,6 +387,7 @@ def render_performance_panel(performance, differences, changed_part, parts, sele
     if changed_part:
         option = parts[changed_part]["options"][selections[changed_part]]
         st.markdown(f"<div class='why'><b>왜 변했나요?</b><br>{html.escape(option['explanation'])}</div>", unsafe_allow_html=True)
+    render_change_summary(performance, previous_performance, differences, changed_part, parts, selections)
     st.markdown("<div class='footnote'>0~100은 실제 측정값이 아니라 물리적 경향을 쉽게 비교하기 위한 학습용 게임 지표입니다.</div>", unsafe_allow_html=True)
 
 
@@ -315,8 +428,9 @@ def main():
     with center:
         st.markdown("<div class='section-label'>3D CAR / DRAG TO EXPLORE</div>", unsafe_allow_html=True)
         render_3d_car(parts, selections, active_part)
+        render_selected_part_preview(parts, selections, active_part)
     with right:
-        render_performance_panel(current_performance, differences, st.session_state.last_changed_part, parts, selections)
+        render_performance_panel(current_performance, previous_performance, differences, st.session_state.last_changed_part, parts, selections)
 
     # 이번 성능을 다음 재실행의 비교 기준으로 저장합니다.
     st.session_state.previous_performance = deepcopy(current_performance)
