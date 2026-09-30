@@ -137,19 +137,32 @@ def apply_game_css():
     .logo{font:700 25px 'Oxanium';letter-spacing:2px}.logo b{color:var(--red)}.step{font:600 11px 'Oxanium';color:#8794a3;letter-spacing:2px}
     .intro{display:flex;gap:22px;align-items:center;padding:9px 15px;margin-bottom:12px;background:#10161ed9;border:1px solid #27313d;color:#c5cfda;font-size:12px}.intro strong{color:#fff;font:700 14px 'Oxanium'}
     .section-label{font:700 12px 'Oxanium';letter-spacing:2px;color:#9aa7b5;border-bottom:1px solid #27313d;padding-bottom:9px;margin-bottom:8px}
-    div[data-testid='stButton']>button,div[data-testid='stButton']>button[kind],div.stButton>button{width:100%!important;min-height:44px;text-align:left!important;background:#10161e!important;border:1px solid #354252!important;color:#f2f6fa!important;border-radius:4px!important;font-weight:700!important;opacity:1!important;-webkit-text-fill-color:#f2f6fa!important}
-    div[data-testid='stButton']>button p,div[data-testid='stButton']>button span{color:#f2f6fa!important;-webkit-text-fill-color:#f2f6fa!important}
-    div[data-testid='stButton']>button:hover{border-color:#27d6ff!important;color:#fff!important;background:#172631!important;box-shadow:inset 3px 0 #27d6ff!important}
-    div[data-testid='stButton']>button:focus{border-color:#ff3158!important;background:#1a2029!important;color:#fff!important}
-    div[data-testid='stButton']>button:disabled{background:#242c35!important;border-color:#3b4652!important;color:#aeb9c5!important;-webkit-text-fill-color:#aeb9c5!important;opacity:1!important}
-    div[data-testid='stButton']>button:disabled p,div[data-testid='stButton']>button:disabled span{color:#aeb9c5!important;-webkit-text-fill-color:#aeb9c5!important}
+    /* Streamlit 버전별 버튼 클래스보다 높은 우선순위로 모든 상태의 대비를 고정합니다. */
+    .stApp div[data-testid="stButton"] button,
+    .stApp div[data-testid="stButton"] button[kind],
+    .stApp button[data-testid^="stBaseButton"],
+    .stApp .stButton button {width:100%!important;min-height:44px!important;text-align:left!important;background-color:#10161e!important;background-image:none!important;border:1px solid #354252!important;color:#f4f7fb!important;border-radius:4px!important;font-weight:700!important;opacity:1!important;-webkit-text-fill-color:#f4f7fb!important;box-shadow:none!important}
+    .stApp div[data-testid="stButton"] button *,
+    .stApp button[data-testid^="stBaseButton"] *,
+    .stApp .stButton button * {color:#f4f7fb!important;-webkit-text-fill-color:#f4f7fb!important;opacity:1!important}
+    .stApp div[data-testid="stButton"] button:hover,
+    .stApp button[data-testid^="stBaseButton"]:hover {background-color:#172631!important;border-color:#27d6ff!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:inset 3px 0 #27d6ff!important}
+    .stApp div[data-testid="stButton"] button:active,
+    .stApp div[data-testid="stButton"] button:focus,
+    .stApp button[data-testid^="stBaseButton"]:active,
+    .stApp button[data-testid^="stBaseButton"]:focus {background-color:#392033!important;border-color:#ff3158!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:inset 4px 0 #ff3158!important}
+    .stApp div[data-testid="stButton"] button:disabled,
+    .stApp button[data-testid^="stBaseButton"]:disabled {background-color:#242c35!important;background-image:none!important;border-color:#46515d!important;color:#c4ced8!important;-webkit-text-fill-color:#c4ced8!important;opacity:1!important}
+    .stApp div[data-testid="stButton"] button:disabled * {color:#c4ced8!important;-webkit-text-fill-color:#c4ced8!important;opacity:1!important}
     .active-part{border-left:3px solid var(--red);background:#181f29;padding:10px 12px;margin:4px 0 10px;font:700 13px 'Oxanium';color:#fff}
-    .perf{padding:9px 0}.perf-top{display:flex;justify-content:space-between;align-items:end}.perf-name{font:700 13px 'Oxanium';color:#fff}.perf-help{font-size:10px;color:#8290a0;margin-top:2px}.perf-num{font:700 19px 'Oxanium'}
-    .track{height:8px;background:#242d38;margin-top:7px;overflow:hidden;transform:skewX(-14deg)}.fill{height:100%;background:linear-gradient(90deg,#27d6ff,#8a68ff)}
+    .perf{position:relative;padding:11px 10px;margin:8px 0;background:#0d131a;border:1px solid #26313d;border-radius:3px}.perf-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.perf-name{font:700 13px 'Oxanium';color:#fff;letter-spacing:.5px}.perf-help{font-size:10px;color:#8c9aaa;margin-top:3px;line-height:1.35}.perf-num{font:700 17px 'Oxanium';white-space:nowrap}.track{height:13px;background:#222b35;margin-top:9px;overflow:hidden;border:1px solid #33404d;transform:skewX(-12deg)}.fill{height:100%;background:linear-gradient(90deg,#27d6ff,#7b61ff);box-shadow:0 0 12px #27d6ff77;transition:width .35s ease}.perf:nth-of-type(even) .fill{background:linear-gradient(90deg,#20d7c7,#27d6ff)}
+    /* title 속성 대신 순수 :hover 툴팁을 사용하므로 포인터가 벗어나면 즉시 사라집니다. */
+    .hover-tip{position:relative;display:inline-block;cursor:help}.hover-tip .tip-box{visibility:hidden;opacity:0;pointer-events:none;position:absolute;z-index:9999;left:0;top:calc(100% + 6px);width:250px;padding:9px 10px;background:#05080c;color:#edf4fa;border:1px solid #415162;border-top:2px solid #27d6ff;box-shadow:0 10px 25px #000b;font-size:10px;line-height:1.5;transition:opacity .08s}.hover-tip:hover .tip-box{visibility:visible;opacity:1}.hover-tip:not(:hover) .tip-box{visibility:hidden;opacity:0}
+
     .up{color:#37eca0}.down{color:#ff5872}.same{color:#6e7b89}.why{margin:12px 0;padding:11px;border-left:3px solid #27d6ff;background:#0c131b;color:#c9d4de;font-size:12px;line-height:1.55}
     .option-card{border:1px solid #2a3542;background:#0d1219;padding:10px;margin:7px 0}.option-title{font:700 13px 'Oxanium';color:#fff}.stars{color:#ffc52e;letter-spacing:1px;font-size:12px}.option-mini{font-size:10px;color:#8491a0;margin-top:6px}
     .selected-option{border-color:#ff3158;box-shadow:inset 3px 0 #ff3158}.footnote{color:#718090;font-size:10px;margin-top:12px;line-height:1.5}
-    .tuning-bay{margin-top:12px;padding:15px;border:1px solid #2b3744;background:linear-gradient(145deg,#101720,#080c11);box-shadow:0 16px 45px #0007}.option-visual{height:126px;border:1px solid #2d3946;background:radial-gradient(circle,#25323d,#0a0e13 72%);display:flex;align-items:center;justify-content:center;margin-bottom:7px}.option-name{text-align:center;font:700 12px 'Oxanium';color:#fff;min-height:30px}.option-desc{min-height:48px;color:#94a1af;font-size:10px;line-height:1.45}.installed{color:#36eca0;text-align:center;font:700 11px 'Oxanium';padding:8px;border:1px solid #2a6a50;background:#10241c}.part-svg{width:96%;height:112px}.part-svg .main{fill:var(--pc);stroke:#d9f6ff;stroke-width:1}.part-svg .dark{fill:#080a0d;stroke:var(--pc);stroke-width:3}.part-svg .line{stroke:var(--pc);stroke-width:6;stroke-linecap:round}.part-svg .thin{stroke:#dbe8f2;stroke-width:2;fill:none}.center-note{color:#8795a4;font-size:11px;line-height:1.55;margin:6px 0 12px}.setup-title{font:700 18px 'Oxanium';color:#fff}.setup-sub{font-size:12px;color:#9aa7b5;margin:3px 0 12px}.option-tip{cursor:help}
+    .tuning-bay{margin-top:12px;padding:15px;border:1px solid #2b3744;background:linear-gradient(145deg,#101720,#080c11);box-shadow:0 16px 45px #0007}.option-visual{height:126px;border:1px solid #2d3946;background:radial-gradient(circle,#25323d,#0a0e13 72%);display:flex;align-items:center;justify-content:center;margin-bottom:7px}.option-name{text-align:center;font:700 12px 'Oxanium';color:#fff;min-height:30px}.option-desc{min-height:48px;color:#94a1af;font-size:10px;line-height:1.45}.installed{color:#36eca0;text-align:center;font:700 11px 'Oxanium';padding:8px;border:1px solid #2a6a50;background:#10241c}.part-svg{width:96%;height:112px}.part-svg .main{fill:var(--pc);stroke:#d9f6ff;stroke-width:1}.part-svg .dark{fill:#080a0d;stroke:var(--pc);stroke-width:3}.part-svg .line{stroke:var(--pc);stroke-width:6;stroke-linecap:round}.part-svg .thin{stroke:#dbe8f2;stroke-width:2;fill:none}.center-note{color:#8795a4;font-size:11px;line-height:1.55;margin:6px 0 12px}.setup-title{font:700 18px 'Oxanium';color:#fff}.setup-sub{font-size:12px;color:#9aa7b5;margin:3px 0 12px}.option-tip{cursor:help;position:relative}.option-tip .tip-box{visibility:hidden;opacity:0;pointer-events:none;position:absolute;z-index:50;left:8px;right:8px;bottom:8px;padding:7px;background:#05080ced;color:#fff;border:1px solid #27d6ff;font-size:10px;line-height:1.45;transition:opacity .08s}.option-tip:hover .tip-box{visibility:visible;opacity:1}.option-tip:not(:hover) .tip-box{visibility:hidden;opacity:0}
     .part-role{padding:10px 12px;margin:0 0 11px;background:#0c131b;border-left:3px solid var(--cyan);color:#d3dde6;font-size:12px;line-height:1.55}.part-role b{font:700 15px 'Oxanium';color:#fff}.part-role span{color:#91a0af}
     .preview-shell{border:1px solid #2b3744;background:linear-gradient(135deg,#101821,#080c11);margin-top:10px;box-shadow:0 12px 35px #0006}.preview-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #283441}.preview-title{font:700 12px 'Oxanium';letter-spacing:2px}.preview-current{font:700 12px 'Oxanium';color:#ffbd32}.proscons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.pros,.cons{padding:10px;background:#0c1218;border:1px solid #26313d;font-size:11px;line-height:1.7}.pros b{color:#37eca0}.cons b{color:#ff7387}.change-table{margin:10px 0;border:1px solid #293542;background:#0b1016}.change-row{display:grid;grid-template-columns:1.35fr .8fr .8fr .65fr;padding:7px 9px;border-bottom:1px solid #202a34;font:600 11px 'Oxanium'}.change-row:last-child{border-bottom:0}.result-line{padding:12px;background:linear-gradient(90deg,#17251f,#10161d);border:1px solid #2b5947;color:#d8f7e9;font-size:12px;line-height:1.6}.flow-arrow{text-align:center;color:#27d6ff;font:700 18px 'Oxanium';margin:-3px 0 1px}
     @media(max-width:1000px){.intro{flex-wrap:wrap}.block-container{padding:.6rem}.garage-head{position:static}}
@@ -177,7 +190,7 @@ def build_3d_html(parts, selections, active_part):
     #info{{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);min-width:300px;text-align:center;background:#070a0edb;border:1px solid #354251;border-top:2px solid #27d6ff;color:#fff;padding:9px 14px;opacity:0;transition:.15s;pointer-events:none}}
     #info b{{font-size:13px;letter-spacing:1px}}#info span{{display:block;color:#aab5c1;font-size:10px;margin-top:3px}}
     .label{{color:#dce6ef;position:relative;background:#080b10d9;border:1px solid #3b4856;padding:4px 7px;font:bold 9px Arial;letter-spacing:.8px;white-space:nowrap;pointer-events:none}}
-    .label:after{{content:'';position:absolute;width:28px;height:1px;background:#708090;left:50%;top:100%;transform:rotate(55deg);transform-origin:left}}.label.active{{color:#fff;border-color:#ff3158;box-shadow:0 0 12px #ff315888}}
+    .label:after{{content:'';position:absolute;width:28px;height:1px;background:#708090;left:50%;top:100%;transform:rotate(55deg);transform-origin:left}}.label.active{{color:#fff;background:#35101c;border:2px solid #ff3158;box-shadow:0 0 8px #ff3158,0 0 24px #ff3158,0 0 42px #27d6ff;font-size:11px;animation:pulse 1.15s ease-in-out infinite alternate}}@keyframes pulse{{to{{transform:scale(1.08);filter:brightness(1.35)}}}}
     </style><script type='importmap'>{{"imports":{{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}}}</script></head>
     <body><div id='app'></div><div id='hint'>DRAG 회전 · WHEEL 확대/축소 · PART 클릭</div><div id='badge'>REAL-TIME 3D / WEBGL</div><div id='info'></div>
     <script type='module'>
@@ -224,13 +237,17 @@ def build_3d_html(parts, selections, active_part):
     const labelPos={{frontWing:[0,.15,3.65],rearWing:[0,1.65,-3.15],tyres:[-2.2,.4,1.9],floor:[1.6,-.6,.1],diffuser:[1.4,.1,-3],engine:[0,1.2,-1.7],ers:[.8,1,-1.2],cockpit:[0,1.7,.1],sidepods:[1.65,.55,-.45]}};
     Object.entries(labelPos).forEach(([n,p])=>{{const d=document.createElement('div');d.className='label'+(cfg[n]?.key===active?' active':'');d.textContent=names[n];const l=new CSS2DObject(d);l.position.set(...p);partGroups[n]?.add(l)}});
     // 왼쪽에서 선택한 파츠는 차량에서도 계속 빛나도록 해 프리뷰와 위치를 연결합니다.
-    const active3d=Object.keys(cfg).find(n=>cfg[n]?.key===active);if(active3d&&partGroups[active3d]){{partGroups[active3d].traverse(o=>{{if(o.isMesh){{o.material=o.material.clone();o.material.emissive?.setHex(0x36566b);o.material.emissiveIntensity=1.1}}}})}}
+    const active3d=Object.keys(cfg).find(n=>cfg[n]?.key===active), activeGroup=partGroups[active3d];
+    // 선택하지 않은 부분은 살짝 어둡게 하고, 선택 파츠에는 강한 발광·와이어 박스·점광원을 더합니다.
+    Object.entries(partGroups).forEach(([name,g])=>g.traverse(o=>{{if(o.isMesh){{o.material=o.material.clone();if(g!==activeGroup){{o.material.color.multiplyScalar(.62);o.material.opacity=.82;o.material.transparent=true}}}}}}));
+    let activeBox=null, activeLight=null;
+    if(activeGroup){{activeGroup.traverse(o=>{{if(o.isMesh){{o.material.emissive?.setHex(0x27d6ff);o.material.emissiveIntensity=2.8}}}});activeBox=new THREE.BoxHelper(activeGroup,0x42e8ff);activeBox.material.transparent=true;activeBox.material.opacity=.9;car.add(activeBox);const b=new THREE.Box3().setFromObject(activeGroup),c=new THREE.Vector3();b.getCenter(c);activeLight=new THREE.PointLight(0x27d6ff,42,7);activeLight.position.copy(c);car.add(activeLight)}}
     const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(),info=document.getElementById('info');let hovered=null;
     function hit(e){{const rect=renderer.domElement.getBoundingClientRect();mouse.x=((e.clientX-rect.left)/rect.width)*2-1;mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;ray.setFromCamera(mouse,camera);return ray.intersectObjects(pickable,false)[0]?.object||null}}
-    renderer.domElement.addEventListener('pointermove',e=>{{const obj=hit(e);pickable.forEach(m=>m.material.emissive?.setHex(0));if(obj){{obj.material.emissive?.setHex(0x243344);hovered=obj.userData.part;renderer.domElement.style.cursor='pointer';info.style.opacity=1;info.innerHTML='<b>'+names[hovered]+'</b><span>'+(descriptions[hovered]||'클릭하면 설정 패널이 열립니다')+'</span>'}}else{{hovered=null;renderer.domElement.style.cursor='grab';info.style.opacity=0}}}});
+    renderer.domElement.addEventListener('pointermove',e=>{{const obj=hit(e);pickable.forEach(m=>{{m.material.emissive?.setHex(m.parent===activeGroup?0x27d6ff:0);m.material.emissiveIntensity=m.parent===activeGroup?2.8:1}});if(obj){{obj.material.emissive?.setHex(obj.parent===activeGroup?0x66ffff:0x243344);hovered=obj.userData.part;renderer.domElement.style.cursor='pointer';info.style.opacity=1;info.innerHTML='<b>'+names[hovered]+'</b><span>'+(descriptions[hovered]||'클릭하면 설정 패널이 열립니다')+'</span>'}}else{{hovered=null;renderer.domElement.style.cursor='grab';info.style.opacity=0}}}});
     renderer.domElement.addEventListener('click',()=>{{const key=cfg[hovered]?.key;if(key){{const u=new URL(window.parent.location.href);u.searchParams.set('part',key);window.parent.location.href=u.toString()}}}});
     window.addEventListener('resize',()=>{{camera.aspect=app.clientWidth/app.clientHeight;camera.updateProjectionMatrix();renderer.setSize(app.clientWidth,app.clientHeight);labels.setSize(app.clientWidth,app.clientHeight)}});
-    function animate(){{requestAnimationFrame(animate);controls.update();renderer.render(scene,camera);labels.render(scene,camera)}}animate();
+    function animate(t){{requestAnimationFrame(animate);const pulse=1+Math.sin(t*.004)*.22;if(activeBox)activeBox.material.opacity=.62+Math.sin(t*.004)*.28;if(activeLight)activeLight.intensity=38*pulse;if(activeGroup)activeGroup.traverse(o=>{{if(o.isMesh&&o.material.emissive)o.material.emissiveIntensity=2.5*pulse}});controls.update();renderer.render(scene,camera);labels.render(scene,camera)}}animate(0);
     </script></body></html>"""
 
 
@@ -273,7 +290,7 @@ def render_part_description(active_part, parts):
     """파츠가 무슨 일을 하는지 선택 즉시 한 문장과 툴팁으로 알려 줍니다."""
     short, detail = PART_HELP[active_part]
     name = parts[active_part]["name"].upper()
-    st.markdown(f"<div class='part-role' title='{html.escape(detail, quote=True)}'><b>{name}</b><br>{html.escape(short)} <span>ⓘ 마우스를 올려 자세히 보기</span></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='part-role'><b>{name}</b><br><span class='hover-tip'>{html.escape(short)} ⓘ<span class='tip-box'>{html.escape(detail)}</span></span></div>", unsafe_allow_html=True)
 
 
 def render_selected_part_preview(parts, selections, active_part):
@@ -395,7 +412,7 @@ def render_part_options(parts, active_part, selections):
     for variant, ((option_key, option), column) in enumerate(zip(data["options"].items(), columns)):
         with column:
             tooltip = html.escape(option["explanation"], quote=True)
-            st.markdown(f"<div class='option-visual option-tip' title='{tooltip}'>{render_option_svg(active_part, variant, option['color'])}</div><div class='option-name option-tip' title='{tooltip}'>{option['label']} ⓘ</div><div class='option-desc'>{html.escape(option['explanation'])}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='option-visual option-tip'>{render_option_svg(active_part, variant, option['color'])}<span class='tip-box'>{tooltip}</span></div><div class='option-name'><span class='hover-tip'>{option['label']} ⓘ<span class='tip-box'>{tooltip}</span></span></div><div class='option-desc'>{html.escape(option['explanation'])}</div>", unsafe_allow_html=True)
             if selections[active_part] == option_key:
                 st.markdown("<div class='installed'>장착 중 ✓</div>", unsafe_allow_html=True)
             elif st.button("이 파츠 장착", key=f"equip_{active_part}_{option_key}", use_container_width=True):
@@ -419,7 +436,7 @@ def render_part_detail(parts, active_part, selections):
 def render_physics_tooltip(metric):
     """브라우저 기본 툴팁을 이용해 추가 라이브러리 없이 물리 설명을 제공합니다."""
     short, long_text = PHYSICS_HELP[metric]
-    return f"<span title='{html.escape(long_text, quote=True)}' style='cursor:help'>{html.escape(short)} ⓘ</span>"
+    return f"<span class='hover-tip'>{html.escape(short)} ⓘ<span class='tip-box'>{html.escape(long_text)}</span></span>"
 
 
 def render_performance_panel(performance, previous_performance, differences, changed_part, parts, selections):
