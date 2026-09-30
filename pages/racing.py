@@ -129,7 +129,7 @@ def apply_racing_css():
     .race-logo{font:700 25px 'Oxanium';letter-spacing:2px}.race-logo b{color:var(--red)}.race-step{font:600 11px 'Oxanium';color:#8391a0;letter-spacing:2px}
     .panel{background:linear-gradient(145deg,#111821,#090d12);border:1px solid var(--line);padding:15px;min-height:100%}.panel-title{font:700 12px 'Oxanium';letter-spacing:2px;color:#9daab8;border-bottom:1px solid #293542;padding-bottom:9px;margin-bottom:12px}
     .track-card{height:330px;background:radial-gradient(circle,#1e2a34,#080c11);display:flex;align-items:center;justify-content:center;border:1px solid #2b3744}.track-svg{width:92%;height:92%}.track-line{fill:none;stroke:#59636e;stroke-width:30;stroke-linecap:round;stroke-linejoin:round}.track-edge{fill:none;stroke:#dce4eb;stroke-width:35;stroke-dasharray:3 7}.track-center{fill:none;stroke:#13191f;stroke-width:25}
-    .car-card{text-align:center;padding:14px;background:#0b1016;border:1px solid #283440}.mini-car{width:100%;max-width:360px;height:180px}.car-name{font:700 17px 'Oxanium';letter-spacing:2px}.config-chip{display:inline-block;margin:3px;padding:4px 7px;border:1px solid #344252;color:#9cabb9;font-size:10px}
+    .car-card{text-align:center;padding:14px;background:#0b1016;border:1px solid #283440}.car-name{font:700 17px 'Oxanium';letter-spacing:2px}.config-chip{display:inline-block;margin:3px;padding:4px 7px;border:1px solid #344252;color:#9cabb9;font-size:10px}
     .perf{padding:8px 0}.perf-top{display:flex;justify-content:space-between;font:700 11px 'Oxanium'}.bar{height:9px;margin-top:5px;background:#232c36;overflow:hidden;transform:skewX(-12deg)}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#27d6ff,#8265ff)}
     div[data-testid='stButton'] button{width:100%!important;min-height:56px!important;background:#e51d45!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:1px solid #ff6681!important;font:700 16px 'Oxanium'!important;letter-spacing:2px!important}div[data-testid='stButton'] button *{color:#fff!important;-webkit-text-fill-color:#fff!important}div[data-testid='stButton'] button:hover{background:#ff3158!important;box-shadow:0 0 25px #ff315877!important}
     .empty{max-width:650px;margin:100px auto;padding:35px;text-align:center;background:#0e141c;border:1px solid #2c3845;border-top:3px solid var(--red)}.empty h2{font-family:'Oxanium';color:#fff}.empty p{color:#9caab8}
@@ -289,6 +289,7 @@ def render_race_game(car_data, ai_cars):
 
 def main():
     """차량 확인 → 준비 화면 → 실제 레이스 순서로 페이지 흐름을 관리합니다."""
+    # Streamlit 기본 페이지 탐색 사이드바가 Racing에서도 항상 보이도록 expanded를 사용합니다.
     st.set_page_config(page_title="F1 Physics Racing", page_icon="🏁", layout="wide", initial_sidebar_state="expanded")
     apply_racing_css()
     car_config = load_my_car_config()
