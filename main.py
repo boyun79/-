@@ -137,14 +137,19 @@ def apply_game_css():
     .logo{font:700 25px 'Oxanium';letter-spacing:2px}.logo b{color:var(--red)}.step{font:600 11px 'Oxanium';color:#8794a3;letter-spacing:2px}
     .intro{display:flex;gap:22px;align-items:center;padding:9px 15px;margin-bottom:12px;background:#10161ed9;border:1px solid #27313d;color:#c5cfda;font-size:12px}.intro strong{color:#fff;font:700 14px 'Oxanium'}
     .section-label{font:700 12px 'Oxanium';letter-spacing:2px;color:#9aa7b5;border-bottom:1px solid #27313d;padding-bottom:9px;margin-bottom:8px}
-    div.stButton>button{width:100%;min-height:44px;text-align:left;background:#10161e;border:1px solid #27313d;color:#dbe3eb;border-radius:4px;font-weight:700}
-    div.stButton>button:hover{border-color:#27d6ff;color:#fff;background:#15202a;box-shadow:inset 3px 0 #27d6ff}
+    div[data-testid='stButton']>button,div[data-testid='stButton']>button[kind],div.stButton>button{width:100%!important;min-height:44px;text-align:left!important;background:#10161e!important;border:1px solid #354252!important;color:#f2f6fa!important;border-radius:4px!important;font-weight:700!important;opacity:1!important;-webkit-text-fill-color:#f2f6fa!important}
+    div[data-testid='stButton']>button p,div[data-testid='stButton']>button span{color:#f2f6fa!important;-webkit-text-fill-color:#f2f6fa!important}
+    div[data-testid='stButton']>button:hover{border-color:#27d6ff!important;color:#fff!important;background:#172631!important;box-shadow:inset 3px 0 #27d6ff!important}
+    div[data-testid='stButton']>button:focus{border-color:#ff3158!important;background:#1a2029!important;color:#fff!important}
+    div[data-testid='stButton']>button:disabled{background:#242c35!important;border-color:#3b4652!important;color:#aeb9c5!important;-webkit-text-fill-color:#aeb9c5!important;opacity:1!important}
+    div[data-testid='stButton']>button:disabled p,div[data-testid='stButton']>button:disabled span{color:#aeb9c5!important;-webkit-text-fill-color:#aeb9c5!important}
     .active-part{border-left:3px solid var(--red);background:#181f29;padding:10px 12px;margin:4px 0 10px;font:700 13px 'Oxanium';color:#fff}
     .perf{padding:9px 0}.perf-top{display:flex;justify-content:space-between;align-items:end}.perf-name{font:700 13px 'Oxanium';color:#fff}.perf-help{font-size:10px;color:#8290a0;margin-top:2px}.perf-num{font:700 19px 'Oxanium'}
     .track{height:8px;background:#242d38;margin-top:7px;overflow:hidden;transform:skewX(-14deg)}.fill{height:100%;background:linear-gradient(90deg,#27d6ff,#8a68ff)}
     .up{color:#37eca0}.down{color:#ff5872}.same{color:#6e7b89}.why{margin:12px 0;padding:11px;border-left:3px solid #27d6ff;background:#0c131b;color:#c9d4de;font-size:12px;line-height:1.55}
     .option-card{border:1px solid #2a3542;background:#0d1219;padding:10px;margin:7px 0}.option-title{font:700 13px 'Oxanium';color:#fff}.stars{color:#ffc52e;letter-spacing:1px;font-size:12px}.option-mini{font-size:10px;color:#8491a0;margin-top:6px}
     .selected-option{border-color:#ff3158;box-shadow:inset 3px 0 #ff3158}.footnote{color:#718090;font-size:10px;margin-top:12px;line-height:1.5}
+    .tuning-bay{margin-top:12px;padding:15px;border:1px solid #2b3744;background:linear-gradient(145deg,#101720,#080c11);box-shadow:0 16px 45px #0007}.option-visual{height:126px;border:1px solid #2d3946;background:radial-gradient(circle,#25323d,#0a0e13 72%);display:flex;align-items:center;justify-content:center;margin-bottom:7px}.option-name{text-align:center;font:700 12px 'Oxanium';color:#fff;min-height:30px}.option-desc{min-height:48px;color:#94a1af;font-size:10px;line-height:1.45}.installed{color:#36eca0;text-align:center;font:700 11px 'Oxanium';padding:8px;border:1px solid #2a6a50;background:#10241c}.part-svg{width:96%;height:112px}.part-svg .main{fill:var(--pc);stroke:#d9f6ff;stroke-width:1}.part-svg .dark{fill:#080a0d;stroke:var(--pc);stroke-width:3}.part-svg .line{stroke:var(--pc);stroke-width:6;stroke-linecap:round}.part-svg .thin{stroke:#dbe8f2;stroke-width:2;fill:none}.center-note{color:#8795a4;font-size:11px;line-height:1.55;margin:6px 0 12px}.setup-title{font:700 18px 'Oxanium';color:#fff}.setup-sub{font-size:12px;color:#9aa7b5;margin:3px 0 12px}.option-tip{cursor:help}
     .part-role{padding:10px 12px;margin:0 0 11px;background:#0c131b;border-left:3px solid var(--cyan);color:#d3dde6;font-size:12px;line-height:1.55}.part-role b{font:700 15px 'Oxanium';color:#fff}.part-role span{color:#91a0af}
     .preview-shell{border:1px solid #2b3744;background:linear-gradient(135deg,#101821,#080c11);margin-top:10px;box-shadow:0 12px 35px #0006}.preview-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #283441}.preview-title{font:700 12px 'Oxanium';letter-spacing:2px}.preview-current{font:700 12px 'Oxanium';color:#ffbd32}.proscons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.pros,.cons{padding:10px;background:#0c1218;border:1px solid #26313d;font-size:11px;line-height:1.7}.pros b{color:#37eca0}.cons b{color:#ff7387}.change-table{margin:10px 0;border:1px solid #293542;background:#0b1016}.change-row{display:grid;grid-template-columns:1.35fr .8fr .8fr .65fr;padding:7px 9px;border-bottom:1px solid #202a34;font:600 11px 'Oxanium'}.change-row:last-child{border-bottom:0}.result-line{padding:12px;background:linear-gradient(90deg,#17251f,#10161d);border:1px solid #2b5947;color:#d8f7e9;font-size:12px;line-height:1.6}.flow-arrow{text-align:center;color:#27d6ff;font:700 18px 'Oxanium';margin:-3px 0 1px}
     @media(max-width:1000px){.intro{flex-wrap:wrap}.block-container{padding:.6rem}.garage-head{position:static}}
@@ -163,7 +168,7 @@ def build_3d_html(parts, selections, active_part):
     visual = {}
     for key, selected in selections.items():
         option = parts[key]["options"][selected]
-        visual[parts[key]["part"]] = {"color": option["color"], "shape": option["shape"], "key": key}
+        visual[parts[key]["part"]] = {"color": option["color"], "shape": option["shape"], "key": key, "variant": list(parts[key]["options"]).index(selected)}
     return f"""<!doctype html><html><head><meta charset='utf-8'><style>
     *{{box-sizing:border-box}}html,body,#app{{margin:0;width:100%;height:100%;overflow:hidden;background:#080b10;font-family:Arial,sans-serif}}
     #app{{background:radial-gradient(ellipse at 50% 42%,#273440 0,#10161e 49%,#07090d 80%)}}
@@ -203,17 +208,17 @@ def build_3d_html(parts, selections, active_part):
     // 사이드포드: 앞은 넓고 뒤로 갈수록 좁아지는 곡면
     const side=group('sidepods');[-1,1].forEach(s=>{{mesh(side,capsule(1.35,.52),red,[s*1.02,-.05,-.65],[Math.PI/2,0,0],[1,.72,1.25]);mesh(side,new THREE.ConeGeometry(.48,2.2,24),red,[s*.94,-.08,-2.0],[-Math.PI/2,0,0],[.75,1,.9])}});
     // 타이어는 실제 회전축을 가진 두꺼운 Torus 3D 메시입니다.
-    const tyres=group('tyres'), tyreMat=mat(0x08090b,.05,.72), stripe=mat(cfg.tyres.color,.15,.38);[[-1.55,1.95,.56], [1.55,1.95,.56],[-1.72,-2.15,.72],[1.72,-2.15,.72]].forEach(p=>{{const [x,z,r]=p;mesh(tyres,new THREE.TorusGeometry(r,r*.38,18,42),tyreMat,[x,-.35,z],[0,Math.PI/2,0]);mesh(tyres,new THREE.TorusGeometry(r*.99,.035,8,48),stripe,[x,-.35,z],[0,Math.PI/2,0])}});
+    const tyres=group('tyres'), tv=cfg.tyres.variant, tyreMat=mat(0x08090b,.05,.58+tv*.1), stripe=mat(cfg.tyres.color,.15,.38);[[-1.55,1.95,.56], [1.55,1.95,.56],[-1.72,-2.15,.72],[1.72,-2.15,.72]].forEach(p=>{{const [x,z,r]=p;mesh(tyres,new THREE.TorusGeometry(r,r*(.43-tv*.045),18+tv*5,42),tyreMat,[x,-.35,z],[0,Math.PI/2,0]);mesh(tyres,new THREE.TorusGeometry(r*.99,.035,8,48),stripe,[x,-.35,z],[0,Math.PI/2,0])}});
     // 프론트 윙: 날개 단면을 가진 여러 곡선형 엘리먼트
-    const fw=group('frontWing'), fwM=mat(cfg.frontWing.color,.65,.22), f=cfg.frontWing.shape;[-.16,.12].forEach((y,i)=>mesh(fw,new THREE.CapsuleGeometry(.11,3.2*f,6,20),fwM,[0,-.58+y,3.62-i*.25],[0,0,Math.PI/2],[1,1,1]));[-1,1].forEach(s=>mesh(fw,new THREE.ExtrudeGeometry(new THREE.Shape().moveTo(0,0).lineTo(.44,.12).lineTo(.28,.65).lineTo(0,.52),{{depth:.06,bevelEnabled:true,bevelSize:.025,bevelThickness:.025}}),fwM,[s*1.75*f,-.88,3.35],[0,s<0?0:Math.PI,0]));
+    const fw=group('frontWing'), fwM=mat(cfg.frontWing.color,.65,.22), f=cfg.frontWing.shape;Array.from({{length:2+cfg.frontWing.variant}},(_,i)=>-.18+i*.22).forEach((y,i)=>mesh(fw,new THREE.CapsuleGeometry(.11,3.2*f,6,20),fwM,[0,-.58+y,3.62-i*.25],[0,0,Math.PI/2],[1,1,1]));[-1,1].forEach(s=>mesh(fw,new THREE.ExtrudeGeometry(new THREE.Shape().moveTo(0,0).lineTo(.44,.12).lineTo(.28,.65).lineTo(0,.52),{{depth:.06,bevelEnabled:true,bevelSize:.025,bevelThickness:.025}}),fwM,[s*1.75*f,-.88,3.35],[0,s<0?0:Math.PI,0]));
     // 리어 윙: 선택에 따라 폭과 높이가 실제로 변합니다.
-    const rw=group('rearWing'), rwM=mat(cfg.rearWing.color,.68,.2), r=cfg.rearWing.shape;mesh(rw,new THREE.CapsuleGeometry(.16,2.55*r,6,20),rwM,[0,1.05,-3.24],[0,0,Math.PI/2]);mesh(rw,new THREE.CapsuleGeometry(.09,2.35*r,6,20),rwM,[0,.72,-3.0],[0,0,Math.PI/2]);[-1,1].forEach(s=>mesh(rw,new THREE.CylinderGeometry(.045,.06,1.3,10),rwM,[s*.92*r,.35,-3.05],[0,0,0]));
+    const rw=group('rearWing'), rwM=mat(cfg.rearWing.color,.68,.2), r=cfg.rearWing.shape;mesh(rw,new THREE.CapsuleGeometry(.16,2.55*r,6,20),rwM,[0,1.05,-3.24],[0,0,Math.PI/2]);Array.from({{length:1+cfg.rearWing.variant}},(_,i)=>mesh(rw,new THREE.CapsuleGeometry(.09,2.35*r,6,20),rwM,[0,.72-i*.22,-3.0+i*.08],[0,0,Math.PI/2]));[-1,1].forEach(s=>mesh(rw,new THREE.CylinderGeometry(.045,.06,1.3,10),rwM,[s*.92*r,.35,-3.05],[0,0,0]));
     const floor=group('floor');const floorShape=new THREE.Shape().moveTo(-1.25,-2.7).lineTo(-1.25,1.4).lineTo(-.8,2.8).lineTo(.8,2.8).lineTo(1.25,1.4).lineTo(1.25,-2.7).lineTo(-1.25,-2.7);mesh(floor,new THREE.ExtrudeGeometry(floorShape,{{depth:.09,bevelEnabled:true,bevelSize:.04,bevelThickness:.03}}),mat(cfg.floor.color,.7,.25),[0,-.92,0],[Math.PI/2,0,0]);
     const diffuser=group('diffuser'), dm=mat(cfg.diffuser.color,.72,.22);[-.72,-.24,.24,.72].forEach(x=>mesh(diffuser,new THREE.BoxGeometry(.055,.7,1.35*cfg.diffuser.shape),dm,[x,-.62,-3.08],[.38,0,0]));
-    const brakes=group('brakes');[[-1.55,1.95],[1.55,1.95],[-1.72,-2.15],[1.72,-2.15]].forEach(p=>mesh(brakes,new THREE.CylinderGeometry(.32,.32,.06,24),mat(cfg.brakes.color,.8,.28),[p[0],-.35,p[1]],[0,0,Math.PI/2]));
-    const suspension=group('suspension');[1.95,-2.15].forEach(z=>[-1,1].forEach(s=>{{mesh(suspension,new THREE.CylinderGeometry(.025,.025,1.35,8),mat(cfg.suspension.color,.8,.2),[s*.82,-.34,z],[0,0,s*.85])}}));
-    const engine=group('engine');mesh(engine,new THREE.CapsuleGeometry(.42,1.2,8,18),mat(cfg.engine.color,.65,.24),[0,.22,-1.75],[Math.PI/2,0,0]);
-    const ers=group('ers');mesh(ers,new THREE.TorusGeometry(.24,.055,10,28),mat(cfg.ers.color,.5,.15),[0,.68,-1.38],[Math.PI/2,0,0]);
+    const brakes=group('brakes'), bv=cfg.brakes.variant;[[-1.55,1.95],[1.55,1.95],[-1.72,-2.15],[1.72,-2.15]].forEach(p=>mesh(brakes,new THREE.CylinderGeometry(.38-bv*.055,.38-bv*.055,.07,24+bv*8),mat(cfg.brakes.color,.8,.28),[p[0],-.35,p[1]],[0,0,Math.PI/2]));
+    const suspension=group('suspension'), sv=cfg.suspension.variant;[1.95,-2.15].forEach(z=>[-1,1].forEach(s=>{{mesh(suspension,new THREE.CylinderGeometry(.038-sv*.007,.038-sv*.007,1.28+sv*.1,8),mat(cfg.suspension.color,.8,.2),[s*.82,-.34,z],[0,0,s*.85])}}));
+    const engine=group('engine'), ev=cfg.engine.variant;mesh(engine,new THREE.CapsuleGeometry(.50-ev*.06,1.45-ev*.12,8,18),mat(cfg.engine.color,.65,.24),[0,.22,-1.75],[Math.PI/2,0,0]);
+    const ers=group('ers'), erv=cfg.ers.variant;mesh(ers,new THREE.TorusGeometry(.30-erv*.035,.075-erv*.01,10,28+erv*8),mat(cfg.ers.color,.5,.15),[0,.68,-1.38],[Math.PI/2,0,0]);
     const descriptions={{frontWing:'앞 타이어를 눌러 코너 진입을 돕는 공기역학 부품',rearWing:'차 뒤를 눌러 코너 안정성을 만드는 부품',tyres:'트랙과 직접 맞닿아 그립을 만드는 부품',brakes:'마찰로 차량의 속도를 줄이는 부품',suspension:'바퀴가 노면을 따라가도록 돕는 부품',floor:'차 밑 공기로 다운포스를 만드는 바닥',diffuser:'바닥 공기를 뒤에서 부드럽게 확산하는 부품',engine:'차량을 앞으로 움직이는 동력을 만드는 장치',ers:'에너지를 저장했다가 가속에 사용하는 장치'}};
     const names={{frontWing:'FRONT WING',rearWing:'REAR WING',tyres:'TYRES',brakes:'BRAKES',suspension:'SUSPENSION',floor:'FLOOR',diffuser:'DIFFUSER',engine:'ENGINE',ers:'ERS',cockpit:'COCKPIT',sidepods:'SIDEPOD'}};
     const labelPos={{frontWing:[0,.15,3.65],rearWing:[0,1.65,-3.15],tyres:[-2.2,.4,1.9],floor:[1.6,-.6,.1],diffuser:[1.4,.1,-3],engine:[0,1.2,-1.7],ers:[.8,1,-1.2],cockpit:[0,1.7,.1],sidepods:[1.65,.55,-.45]}};
@@ -239,7 +244,7 @@ def build_part_preview_html(parts, selections, active_part):
     """선택한 파츠만 확대해 보여 주는 별도의 회전 가능한 3D 프리뷰를 만듭니다."""
     data = parts[active_part]
     option = data["options"][selections[active_part]]
-    cfg = json.dumps({"part": active_part, "color": option["color"], "shape": option["shape"]})
+    cfg = json.dumps({"part": active_part, "color": option["color"], "shape": option["shape"], "variant": list(data["options"]).index(selections[active_part])})
     return f"""<!doctype html><html><head><style>*{{box-sizing:border-box}}html,body,#p{{margin:0;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle,#24313d,#090d12 70%)}}canvas{{display:block}}#tag{{position:absolute;left:14px;bottom:10px;color:#8d9baa;font:10px Arial;letter-spacing:1px}}</style><script type='importmap'>{{"imports":{{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}}}</script></head><body><div id='p'></div><div id='tag'>DRAG TO INSPECT · 3D PART MODEL</div><script type='module'>
     import * as THREE from 'three';import {{OrbitControls}} from 'three/addons/controls/OrbitControls.js';
     const cfg={cfg},root=document.getElementById('p'),scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,root.clientWidth/root.clientHeight,.1,50);camera.position.set(4,2.6,5.5);
@@ -249,15 +254,16 @@ def build_part_preview_html(parts, selections, active_part):
     const g=new THREE.Group();scene.add(g);const m=new THREE.MeshStandardMaterial({{color:cfg.color,metalness:.7,roughness:.22,emissive:0x101820}}),dark=new THREE.MeshStandardMaterial({{color:0x090b0e,roughness:.65}});
     function add(geo,pos=[0,0,0],rot=[0,0,0],mat=m){{const o=new THREE.Mesh(geo,mat);o.position.set(...pos);o.rotation.set(...rot);o.castShadow=true;g.add(o)}}
     const cap=(r,l)=>new THREE.CapsuleGeometry(r,l,8,28),s=cfg.shape;
-    if(cfg.part==='front_wing'){{[-.22,.18].forEach((y,i)=>add(cap(.13,3.5*s),[0,y,-i*.4],[0,0,Math.PI/2]));[-1,1].forEach(x=>add(new THREE.BoxGeometry(.08,.72,.75),[x*1.85*s,0,.05]))}}
-    else if(cfg.part==='rear_wing'){{add(cap(.19,3*s),[0,.65,0],[0,0,Math.PI/2]);add(cap(.11,2.8*s),[0,.12,.18],[0,0,Math.PI/2]);[-1,1].forEach(x=>add(new THREE.BoxGeometry(.1,1.5,.18),[x*1.15*s,-.25,.1]))}}
-    else if(cfg.part==='tyres'){{add(new THREE.TorusGeometry(1.05,.42,24,64),[0,0,0],[0,Math.PI/2,0],dark);add(new THREE.TorusGeometry(1.04,.06,10,64),[0,0,0],[0,Math.PI/2,0],m)}}
-    else if(cfg.part==='brakes'){{add(new THREE.CylinderGeometry(1,1,.18,48),[0,0,0],[0,0,Math.PI/2]);add(new THREE.BoxGeometry(.35,1.05,.45),[0,.25,.72])}}
-    else if(cfg.part==='suspension'){{[-.7,0,.7].forEach((x,i)=>add(new THREE.CylinderGeometry(.06,.06,3.2,12),[x,0,0],[0,0,(i-1)*.48]));add(new THREE.CylinderGeometry(.35,.35,2.1,24),[0,0,0])}}
-    else if(cfg.part==='floor'){{const sh=new THREE.Shape().moveTo(-1.7,-2).lineTo(-1.25,2).lineTo(1.25,2).lineTo(1.7,-2).lineTo(-1.7,-2);add(new THREE.ExtrudeGeometry(sh,{{depth:.12,bevelEnabled:true,bevelSize:.06,bevelThickness:.05}}),[0,0,0],[Math.PI/2,0,0])}}
-    else if(cfg.part==='diffuser'){{[-1.2,-.4,.4,1.2].forEach(x=>add(new THREE.BoxGeometry(.08,1.2,2.4*s),[x,0,0],[.35,0,0]));add(new THREE.BoxGeometry(3.1,.12,2.2*s),[0,-.55,0],[.2,0,0])}}
-    else if(cfg.part==='engine'){{add(cap(.75,2.4),[0,0,0],[Math.PI/2,0,0]);[-1,1].forEach(x=>add(new THREE.CylinderGeometry(.3,.45,1.4,24),[x*.82,0,0],[Math.PI/2,0,0]))}}
-    else{{add(new THREE.TorusGeometry(1.1,.22,20,64));add(new THREE.CylinderGeometry(.18,.18,2.5,18),[0,0,0],[0,0,Math.PI/2])}}
+    const v=cfg.variant;
+    if(cfg.part==='front_wing'){{Array.from({{length:2+v}},(_,i)=>add(cap(.11+v*.015,(3.0+v*.38)*s),[0,-.25+i*.25,-i*.28],[i*.08,0,Math.PI/2]));[-1,1].forEach(x=>add(new THREE.BoxGeometry(.08,.55+v*.15,.62+v*.1),[x*(1.6+v*.18)*s,-.05,.02]))}}
+    else if(cfg.part==='rear_wing'){{Array.from({{length:1+v}},(_,i)=>add(cap(.13+v*.02,(2.5+v*.32)*s),[0,.55-i*.4,-i*.16],[i*.1,0,Math.PI/2]));[-1,1].forEach(x=>add(new THREE.BoxGeometry(.1,1.1+v*.25,.18),[x*(1.0+v*.13)*s,-.25,.1]))}}
+    else if(cfg.part==='tyres'){{add(new THREE.TorusGeometry(1.05,.50-v*.07,18+v*8,64),[0,0,0],[0,Math.PI/2,0],dark);add(new THREE.TorusGeometry(1.04,.075-v*.012,10,64),[0,0,0],[0,Math.PI/2,0],m);for(let i=0;i<4+v*3;i++)add(new THREE.BoxGeometry(.05,.12,.35),[0,Math.sin(i/(4+v*3)*6.28)*.82,Math.cos(i/(4+v*3)*6.28)*.82],[i,0,0],m)}}
+    else if(cfg.part==='brakes'){{add(new THREE.CylinderGeometry(1-v*.12,1-v*.12,.18,36+v*12),[0,0,0],[0,0,Math.PI/2]);add(new THREE.BoxGeometry(.32+v*.1,1.0-v*.1,.45),[0,.25,.72]);for(let i=0;i<v*6;i++)add(new THREE.CylinderGeometry(.035,.035,.25,8),[0,Math.sin(i/6*6.28)*.62,Math.cos(i/6*6.28)*.62],[0,0,Math.PI/2],dark)}}
+    else if(cfg.part==='suspension'){{Array.from({{length:2+v}},(_,i)=>-.7+i*(1.4/(1+v))).forEach((x,i)=>add(new THREE.CylinderGeometry(.085-v*.02,.085-v*.02,3.0+v*.15,12),[x,0,0],[0,0,(i-(1+v)/2)*.35]));add(new THREE.CylinderGeometry(.42-v*.06,.42-v*.06,2.1,24),[0,0,0])}}
+    else if(cfg.part==='floor'){{const w=1.35+(.5-v*.2), sh=new THREE.Shape().moveTo(-w,-2).lineTo(-1.1-v*.12,2).lineTo(1.1+v*.12,2).lineTo(w,-2).lineTo(-w,-2);add(new THREE.ExtrudeGeometry(sh,{{depth:.10+v*.04,bevelEnabled:true,bevelSize:.05,bevelThickness:.04}}),[0,0,0],[Math.PI/2,0,0]);for(let i=0;i<v+1;i++)add(new THREE.BoxGeometry(.06,.25,3.2),[-.55+i*1.1,-.18,0])}}
+    else if(cfg.part==='diffuser'){{Array.from({{length:3+v*2}},(_,i)=>-1.2+i*(2.4/(2+v*2))).forEach(x=>add(new THREE.BoxGeometry(.08,.7+v*.25,(1.7+v*.4)*s),[x,0,0],[.22+v*.12,0,0]));add(new THREE.BoxGeometry(3.1,.12,(1.7+v*.35)*s),[0,-.55,0],[.15+v*.08,0,0])}}
+    else if(cfg.part==='engine'){{add(cap(.55+(.18-v*.08),2.0+(.5-v*.2)),[0,0,0],[Math.PI/2,0,0]);[-1,1].forEach(x=>add(new THREE.CylinderGeometry(.24+(.12-v*.03),.4-v*.04,1.2+v*.15,20+v*6),[x*(.72+v*.08),0,0],[Math.PI/2,0,0]))}}
+    else{{Array.from({{length:1+v}},(_,i)=>add(new THREE.TorusGeometry(1.05-i*.25,.20-v*.025,18,48),[0,0,i*.18]));add(new THREE.CylinderGeometry(.16+.03*v,.16+.03*v,2.2+v*.2,18),[0,0,0],[0,0,Math.PI/2])}}
     const ground=new THREE.Mesh(new THREE.CircleGeometry(4,64),new THREE.MeshStandardMaterial({{color:0x10161c,metalness:.5,roughness:.5}}));ground.rotation.x=-Math.PI/2;ground.position.y=-1.5;scene.add(ground);
     function tick(){{requestAnimationFrame(tick);controls.update();renderer.render(scene,camera)}}tick();window.addEventListener('resize',()=>{{camera.aspect=root.clientWidth/root.clientHeight;camera.updateProjectionMatrix();renderer.setSize(root.clientWidth,root.clientHeight)}});
     </script></body></html>"""
@@ -271,39 +277,49 @@ def render_part_description(active_part, parts):
 
 
 def render_selected_part_preview(parts, selections, active_part):
-    """차량 바로 아래에 현재 파츠의 실제 3D 형태를 확대해 연결된 학습 흐름을 만듭니다."""
-    data, option = parts[active_part], parts[active_part]["options"][selections[active_part]]
-    st.markdown(f"<div class='flow-arrow'>↓ SELECTED PART ↓</div><div class='preview-shell'><div class='preview-head'><span class='preview-title'>{data['name'].upper()}</span><span class='preview-current'>현재 선택 · {option['label']}</span></div></div>", unsafe_allow_html=True)
-    components.html(build_part_preview_html(parts, selections, active_part), height=265, scrolling=False)
+    """차량 아래에서 현재 장착한 파츠를 큰 회전형 3D 모델로 보여 줍니다."""
+    data = parts[active_part]
+    option = data["options"][selections[active_part]]
+    st.markdown(f"<div class='flow-arrow'>↓ 차량에서 선택한 위치 ↓</div><div class='preview-shell'><div class='preview-head'><span class='preview-title'>SELECTED PART · {data['name'].upper()}</span><span class='preview-current'>장착 중 · {option['label']}</span></div></div>", unsafe_allow_html=True)
+    components.html(build_part_preview_html(parts, selections, active_part), height=255, scrolling=False)
     render_part_description(active_part, parts)
 
 
-def generate_part_advantages(option):
-    """균형 점수 75보다 높은 항목을 찾아 숫자 없이도 보이는 장점 목록을 만듭니다."""
-    pairs = sorted(zip(METRICS, option["scores"]), key=lambda item: item[1], reverse=True)
-    return [f"✓ {name} ↑" for name, score in pairs if score >= 82][:3] or ["✓ 균형 잡힌 성능"]
+def calculate_option_difference(parts, active_part, option_key):
+    """같은 파츠의 균형형 옵션과 비교해 해당 옵션만의 실제 장단점을 계산합니다."""
+    options = parts[active_part]["options"]
+    keys = list(options)
+    baseline_key = keys[1] if len(keys) > 1 else keys[0]
+    selected_scores = options[option_key]["scores"]
+    baseline_scores = options[baseline_key]["scores"]
+    return {metric: selected - baseline for metric, selected, baseline in zip(METRICS, selected_scores, baseline_scores)}
 
 
-def generate_part_disadvantages(option):
-    """점수가 낮은 항목을 찾아 선택에 따른 대가를 쉬운 단점 목록으로 만듭니다."""
-    pairs = sorted(zip(METRICS, option["scores"]), key=lambda item: item[1])
-    return [f"△ {name} ↓" for name, score in pairs if score <= 72][:3] or ["△ 뚜렷한 약점이 적음"]
+def generate_part_advantages(option_difference):
+    """균형형보다 좋아진 실제 지표만 장점으로 표시합니다."""
+    result = [f"✓ {metric} ↑ {value}" for metric, value in option_difference.items() if value > 0]
+    return result[:3] or ["✓ 여러 성능의 균형 유지"]
 
+
+def generate_part_disadvantages(option_difference):
+    """균형형보다 낮아진 실제 지표만 단점으로 표시합니다."""
+    result = [f"△ {metric} ↓ {abs(value)}" for metric, value in option_difference.items() if value < 0]
+    return result[:3] or ["△ 뚜렷한 성능 손실 없음"]
 
 def generate_change_explanation(changed_part, parts, selections, differences):
-    """숫자 변화가 실제 주행에서 무엇을 뜻하는지 한 문장으로 연결합니다."""
+    """실제 상승·하락 조합을 읽어 주행 결과를 동적으로 한 문장으로 만듭니다."""
     if not changed_part:
-        return "파츠 옵션을 장착하면 여기에서 실제 주행 변화와 그 이유를 한 문장으로 알려드려요."
+        return "파츠를 장착하면 실제 주행에서 무엇이 달라지는지 알려드려요."
+    if differences.get("그립", 0) > 0:
+        return "그립이 증가해 타이어가 트랙을 더 잘 붙잡으므로 코너와 제동 상황에서 차량을 제어하기 쉬워졌어요."
+    if differences.get("다운포스", 0) > 0 and differences.get("최고속도", 0) < 0:
+        return "다운포스가 증가해 코너에서는 더 안정적으로 달릴 수 있지만, 공기저항도 커져 직선 최고속도는 조금 줄어들 수 있어요."
+    if differences.get("최고속도", 0) > 0 and differences.get("다운포스", 0) < 0:
+        return "공기저항을 줄이는 방향이라 직선에서는 더 빠르지만, 다운포스가 감소해 코너에서는 조금 불안정할 수 있어요."
+    if differences.get("제동", 0) > 0:
+        return "제동 성능이 좋아져 더 늦게 브레이크를 밟고도 원하는 코너 진입 속도로 줄이기 쉬워졌어요."
     option = parts[changed_part]["options"][selections[changed_part]]
-    up = [m for m, d in differences.items() if d > 0]
-    down = [m for m, d in differences.items() if d < 0]
-    result = option["explanation"]
-    if up:
-        result += f" 그래서 {', '.join(up)} 성능이 좋아졌어요."
-    if down:
-        result += f" 대신 {', '.join(down)} 성능은 조금 줄었어요."
-    return result
-
+    return option["explanation"]
 
 def render_change_summary(current, previous, differences, changed_part, parts, selections):
     """변경 전 숫자 → 변경 후 숫자 → 주행 결과를 한 흐름으로 보여 줍니다."""
@@ -319,12 +335,13 @@ def render_change_summary(current, previous, differences, changed_part, parts, s
     st.markdown(f"<div class='section-label'>{parts[changed_part]['name'].upper()} 변경 결과</div><div class='change-table'><div class='change-row'><span>성능</span><span>BEFORE</span><span>AFTER</span><span>CHANGE</span></div>{rows}</div><div class='result-line'>💡 <b>어떤 변화가 생겼나요?</b><br>{html.escape(explanation)}</div>", unsafe_allow_html=True)
 
 
-def render_advantages_and_disadvantages(parts, active_part, selections):
-    """현재 옵션의 장단점을 체크와 삼각형 표시로 빠르게 비교하게 합니다."""
-    option = parts[active_part]["options"][selections[active_part]]
-    pros = "<br>".join(generate_part_advantages(option))
-    cons = "<br>".join(generate_part_disadvantages(option))
+def render_advantages_and_disadvantages(parts, active_part, option_key):
+    """현재 고른 후보 옵션을 균형형과 비교해 실제 장점과 단점을 표시합니다."""
+    difference = calculate_option_difference(parts, active_part, option_key)
+    pros = "<br>".join(generate_part_advantages(difference))
+    cons = "<br>".join(generate_part_disadvantages(difference))
     st.markdown(f"<div class='proscons'><div class='pros'><b>장점</b><br>{pros}</div><div class='cons'><b>단점</b><br>{cons}</div></div>", unsafe_allow_html=True)
+
 
 # -----------------------------------------------------------------------------
 # 5. 게임 조작 패널
@@ -350,21 +367,54 @@ def stars(value):
     return "★" * value + "☆" * (5 - value)
 
 
-def render_part_detail(parts, active_part, selections):
-    """선택한 파츠 옵션을 게임 카드처럼 보여 주고 버튼으로 교체합니다."""
-    data = parts[active_part]
-    st.markdown(f"<div class='section-label'>SETUP / {data['name'].upper()}</div>", unsafe_allow_html=True)
-    for option_key, option in data["options"].items():
-        selected_class = " selected-option" if selections[active_part] == option_key else ""
-        st.markdown(f"""<div class='option-card{selected_class}'><div class='option-title'>{option['label']}</div>
-        <div class='option-mini'>최고속도 <span class='stars'>{stars(option['stars'][1])}</span><br>다운포스 <span class='stars'>{stars(option['stars'][0])}</span><br>코너링 <span class='stars'>{stars(option['stars'][2])}</span></div></div>""", unsafe_allow_html=True)
-        if st.button("장착됨 ✓" if selections[active_part] == option_key else "이 파츠 장착", key=f"equip_{active_part}_{option_key}", disabled=selections[active_part] == option_key, use_container_width=True):
-            # 사용자가 옵션을 누르면 선택값을 저장하고 Streamlit 전체를 즉시 다시 계산합니다.
-            st.session_state.selections[active_part] = option_key
-            st.session_state.last_changed_part = active_part
-            st.rerun()
+def render_option_svg(part_key, variant, color):
+    """세 옵션의 크기·플랩 수·표면 패턴이 확실히 다른 교육용 파츠 SVG를 만듭니다."""
+    v = variant
+    if part_key == "front_wing":
+        width = 125 + v * 24; flaps = "".join(f'<path class="thin" d="M{42-v*7} {55-i*11} Q100 {36-i*8} {158+v*7} {55-i*11}"/>' for i in range(2+v))
+        body = f'<path class="main" d="M{100-width/2} 68 Q100 {40-v*5} {100+width/2} 68 L{100+width/2-8} 82 Q100 {58-v*5} {100-width/2+8} 82Z"/>{flaps}<path class="line" d="M38 40v48M162 40v48"/>'
+    elif part_key == "rear_wing":
+        body = "".join(f'<path class="main" d="M{42-v*8} {38+i*17} Q100 {25+i*14-v*3} {158+v*8} {38+i*17} L{155+v*8} {48+i*17} Q100 {37+i*14} {45-v*8} {48+i*17}Z"/>' for i in range(1+v)) + '<path class="line" d="M50 35v65M150 35v65"/>'
+    elif part_key == "tyres":
+        grooves="".join(f'<path class="thin" d="M{64+i*12} 30l-8 60"/>' for i in range(3+v*2)); body=f'<ellipse class="dark" cx="100" cy="62" rx="{38-v*3}" ry="50"/><ellipse class="main" cx="100" cy="62" rx="{20-v*2}" ry="31"/>{grooves}'
+    elif part_key == "brakes":
+        holes="".join(f'<circle cx="{100+28*((i%2)*2-1)}" cy="{38+i*12}" r="3" fill="#071018"/>' for i in range(2+v*2)); body=f'<circle class="main" cx="100" cy="62" r="{42-v*4}"/><circle class="dark" cx="100" cy="62" r="18"/>{holes}<rect class="main" x="132" y="38" width="{20+v*5}" height="48" rx="7"/>'
+    elif part_key == "suspension": body="".join(f'<path class="line" d="M{45+i*55/(1+v)} 95 L{75+i*25} 28"/>' for i in range(2+v))+f'<rect class="main" x="88" y="20" width="{24-v*3}" height="84" rx="10"/>'
+    elif part_key == "floor": body=f'<path class="main" d="M{42-v*8} 104 L{58+v*5} 18 H{142-v*5} L{158+v*8} 104Z"/>'+"".join(f'<path class="thin" d="M{76+i*24} 25v70"/>' for i in range(1+v))
+    elif part_key == "diffuser": body=f'<path class="main" d="M{48-v*6} 96 L{58+v*4} 26 H{142-v*4} L{152+v*6} 96Z"/>'+"".join(f'<path class="line" d="M{62+i*(76/(2+v*2))} 32l-8 58"/>' for i in range(3+v*2))
+    elif part_key == "engine": body=f'<ellipse class="main" cx="100" cy="62" rx="{56-v*5}" ry="{30+v*3}"/><circle class="dark" cx="{64+v*4}" cy="62" r="{17-v*2}"/><circle class="dark" cx="{136-v*4}" cy="62" r="{17-v*2}"/>'+"".join(f'<path class="thin" d="M{80+i*12} 35v54"/>' for i in range(1+v*2))
+    else: body="".join(f'<ellipse class="main" cx="100" cy="62" rx="{52-i*12}" ry="{34-i*8}"/>' for i in range(1+v))+f'<path class="line" d="M{52-v*5} 62h{96+v*10}"/>'
+    return f'<svg class="part-svg" viewBox="0 0 200 125" style="--pc:{color}" aria-label="옵션별 파츠 모습">{body}</svg>'
 
-    render_advantages_and_disadvantages(parts, active_part, selections)
+
+def render_part_options(parts, active_part, selections):
+    """중앙에 세 옵션의 서로 다른 모습을 나란히 보여 주고 그 자리에서 장착하게 합니다."""
+    data = parts[active_part]
+    st.markdown("<div class='section-label'>옵션을 비교하고 장착하세요</div>", unsafe_allow_html=True)
+    columns = st.columns(len(data["options"]), gap="small")
+    for variant, ((option_key, option), column) in enumerate(zip(data["options"].items(), columns)):
+        with column:
+            tooltip = html.escape(option["explanation"], quote=True)
+            st.markdown(f"<div class='option-visual option-tip' title='{tooltip}'>{render_option_svg(active_part, variant, option['color'])}</div><div class='option-name option-tip' title='{tooltip}'>{option['label']} ⓘ</div><div class='option-desc'>{html.escape(option['explanation'])}</div>", unsafe_allow_html=True)
+            if selections[active_part] == option_key:
+                st.markdown("<div class='installed'>장착 중 ✓</div>", unsafe_allow_html=True)
+            elif st.button("이 파츠 장착", key=f"equip_{active_part}_{option_key}", use_container_width=True):
+                # 변경 직전의 전체 성능을 저장해야 오른쪽에서 전/후 숫자를 정확히 비교할 수 있습니다.
+                st.session_state.change_before = calculate_car_performance(parts, st.session_state.selections)
+                st.session_state.selections[active_part] = option_key
+                st.session_state.last_changed_part = active_part
+                st.rerun()
+    render_advantages_and_disadvantages(parts, active_part, selections[active_part])
+    option = data["options"][selections[active_part]]
+    st.markdown(f"<div class='result-line'>💡 <b>이 파츠의 특징</b><br>{html.escape(option['explanation'])}</div>", unsafe_allow_html=True)
+
+
+def render_part_detail(parts, active_part, selections):
+    """차량 아래 중앙 튜닝 베이에 프리뷰·옵션·장단점을 순서대로 배치합니다."""
+    st.markdown("<div class='tuning-bay'>", unsafe_allow_html=True)
+    render_selected_part_preview(parts, selections, active_part)
+    render_part_options(parts, active_part, selections)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 def render_physics_tooltip(metric):
     """브라우저 기본 툴팁을 이용해 추가 라이브러리 없이 물리 설명을 제공합니다."""
@@ -415,7 +465,7 @@ def main():
     selections = st.session_state.selections
     active_part = st.session_state.active_part
     current_performance = calculate_car_performance(parts, selections)
-    previous_performance = st.session_state.get("previous_performance")
+    previous_performance = st.session_state.get("change_before")
     differences = calculate_performance_difference(current_performance, previous_performance)
 
     st.markdown("<div class='garage-head'><div class='logo'>F1 <b>PHYSICS</b> GARAGE</div><div class='step'>BUILD 02 · INTERACTIVE 3D SETUP</div></div>", unsafe_allow_html=True)
@@ -424,17 +474,14 @@ def main():
     left, center, right = st.columns([0.78, 2.45, 1.05], gap="medium")
     with left:
         render_part_menu(parts, active_part)
-        render_part_detail(parts, active_part, selections)
     with center:
         st.markdown("<div class='section-label'>3D CAR / DRAG TO EXPLORE</div>", unsafe_allow_html=True)
         render_3d_car(parts, selections, active_part)
-        render_selected_part_preview(parts, selections, active_part)
+        render_part_detail(parts, active_part, selections)
     with right:
         render_performance_panel(current_performance, previous_performance, differences, st.session_state.last_changed_part, parts, selections)
 
-    # 이번 성능을 다음 재실행의 비교 기준으로 저장합니다.
-    st.session_state.previous_performance = deepcopy(current_performance)
-    st.session_state.last_changed_part = None
+    # 마지막 변경 기록은 다음 파츠를 장착할 때까지 유지해 학습 설명이 사라지지 않게 합니다.
 
 
 if __name__ == "__main__":
