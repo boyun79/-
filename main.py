@@ -154,6 +154,7 @@ def apply_game_css():
     .stApp div[data-testid="stButton"] button:disabled,
     .stApp button[data-testid^="stBaseButton"]:disabled {background-color:#242c35!important;background-image:none!important;border-color:#46515d!important;color:#c4ced8!important;-webkit-text-fill-color:#c4ced8!important;opacity:1!important}
     .stApp div[data-testid="stButton"] button:disabled * {color:#c4ced8!important;-webkit-text-fill-color:#c4ced8!important;opacity:1!important}
+    .part-info-box{margin:-2px 0 9px;padding:11px;background:#080d13;border:1px solid #344353;border-left:3px solid #27d6ff;color:#cbd6df;font-size:11px;line-height:1.55}.part-info-box b{font:700 12px 'Oxanium';color:#fff}
     .active-part{border-left:3px solid var(--red);background:#181f29;padding:10px 12px;margin:4px 0 10px;font:700 13px 'Oxanium';color:#fff}
     .perf{position:relative;padding:11px 10px;margin:8px 0;background:#0d131a;border:1px solid #26313d;border-radius:3px}.perf-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.perf-name{font:700 13px 'Oxanium';color:#fff;letter-spacing:.5px}.perf-help{font-size:10px;color:#8c9aaa;margin-top:3px;line-height:1.35}.perf-num{font:700 17px 'Oxanium';white-space:nowrap}.track{height:13px;background:#222b35;margin-top:9px;overflow:hidden;border:1px solid #33404d;transform:skewX(-12deg)}.fill{height:100%;background:linear-gradient(90deg,#27d6ff,#7b61ff);box-shadow:0 0 12px #27d6ff77;transition:width .35s ease}.perf:nth-of-type(even) .fill{background:linear-gradient(90deg,#20d7c7,#27d6ff)}
     /* title 속성 대신 순수 :hover 툴팁을 사용하므로 포인터가 벗어나면 즉시 사라집니다. */
@@ -190,7 +191,7 @@ def build_3d_html(parts, selections, active_part):
     #info{{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);min-width:300px;text-align:center;background:#070a0edb;border:1px solid #354251;border-top:2px solid #27d6ff;color:#fff;padding:9px 14px;opacity:0;transition:.15s;pointer-events:none}}
     #info b{{font-size:13px;letter-spacing:1px}}#info span{{display:block;color:#aab5c1;font-size:10px;margin-top:3px}}
     .label{{color:#dce6ef;position:relative;background:#080b10d9;border:1px solid #3b4856;padding:4px 7px;font:bold 9px Arial;letter-spacing:.8px;white-space:nowrap;pointer-events:none}}
-    .label:after{{content:'';position:absolute;width:28px;height:1px;background:#708090;left:50%;top:100%;transform:rotate(55deg);transform-origin:left}}.label.active{{color:#fff;background:#35101c;border:2px solid #ff3158;box-shadow:0 0 8px #ff3158,0 0 24px #ff3158,0 0 42px #27d6ff;font-size:11px;animation:pulse 1.15s ease-in-out infinite alternate}}@keyframes pulse{{to{{transform:scale(1.08);filter:brightness(1.35)}}}}
+    .label:after{{content:'';position:absolute;width:28px;height:1px;background:#708090;left:50%;top:100%;transform:rotate(55deg);transform-origin:left}}.label.active{{color:#fff;background:#35101c;border:2px solid #ff3158;box-shadow:0 0 8px #ff3158,0 0 24px #ff3158,0 0 42px #27d6ff;font-size:11px}}
     </style><script type='importmap'>{{"imports":{{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}}}</script></head>
     <body><div id='app'></div><div id='hint'>DRAG 회전 · WHEEL 확대/축소 · PART 클릭</div><div id='badge'>REAL-TIME 3D / WEBGL</div><div id='info'></div>
     <script type='module'>
@@ -212,6 +213,8 @@ def build_3d_html(parts, selections, active_part):
     function group(name){{const g=new THREE.Group();g.userData.part=name;partGroups[name]=g;car.add(g);return g}}
     function mesh(g,geo,material,pos=[0,0,0],rot=[0,0,0],scale=[1,1,1]){{const m=new THREE.Mesh(geo,material);m.position.set(...pos);m.rotation.set(...rot);m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;m.userData.part=g.userData.part;g.add(m);pickable.push(m);return m}}
     function capsule(length,radius){{return new THREE.CapsuleGeometry(radius,length,8,20)}}
+    // 두 지점 사이에 실제 두께가 있는 서스펜션 암을 만드는 도우미입니다.
+    function rodBetween(g,a,b,radius,material){{const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),mid=start.clone().add(end).multiplyScalar(.5),length=start.distanceTo(end);const rod=mesh(g,new THREE.CylinderGeometry(radius,radius,length,12),material,[mid.x,mid.y,mid.z]);rod.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),end.clone().sub(start).normalize());return rod}}
     // 매끈한 곡면 차체: 길쭉한 캡슐과 유선형 노즈를 겹쳐 실제 포뮬러카 실루엣을 만듭니다.
     const body=group('body'), red=mat(0xd91536,.72,.24);mesh(body,capsule(3.1,.65),red,[0,.05,0],[Math.PI/2,0,0],[1,1,1]);mesh(body,new THREE.ConeGeometry(.62,4.5,32),red,[0,-.08,3.35],[Math.PI/2,0,0],[1,.55,1]);
     mesh(body,new THREE.SphereGeometry(1.0,32,18),red,[0,.05,-1.35],[0,0,0],[1.35,.78,1.75]);
@@ -229,13 +232,25 @@ def build_3d_html(parts, selections, active_part):
     const floor=group('floor');const floorShape=new THREE.Shape().moveTo(-1.25,-2.7).lineTo(-1.25,1.4).lineTo(-.8,2.8).lineTo(.8,2.8).lineTo(1.25,1.4).lineTo(1.25,-2.7).lineTo(-1.25,-2.7);mesh(floor,new THREE.ExtrudeGeometry(floorShape,{{depth:.09,bevelEnabled:true,bevelSize:.04,bevelThickness:.03}}),mat(cfg.floor.color,.7,.25),[0,-.92,0],[Math.PI/2,0,0]);
     const diffuser=group('diffuser'), dm=mat(cfg.diffuser.color,.72,.22);[-.72,-.24,.24,.72].forEach(x=>mesh(diffuser,new THREE.BoxGeometry(.055,.7,1.35*cfg.diffuser.shape),dm,[x,-.62,-3.08],[.38,0,0]));
     const brakes=group('brakes'), bv=cfg.brakes.variant;[[-1.55,1.95],[1.55,1.95],[-1.72,-2.15],[1.72,-2.15]].forEach(p=>mesh(brakes,new THREE.CylinderGeometry(.38-bv*.055,.38-bv*.055,.07,24+bv*8),mat(cfg.brakes.color,.8,.28),[p[0],-.35,p[1]],[0,0,Math.PI/2]));
-    const suspension=group('suspension'), sv=cfg.suspension.variant;[1.95,-2.15].forEach(z=>[-1,1].forEach(s=>{{mesh(suspension,new THREE.CylinderGeometry(.038-sv*.007,.038-sv*.007,1.28+sv*.1,8),mat(cfg.suspension.color,.8,.2),[s*.82,-.34,z],[0,0,s*.85])}}));
+    // 앞·뒤 바퀴 허브와 차체를 위/아래 위시본 및 푸시로드로 연결합니다.
+    const suspension=group('suspension'), sv=cfg.suspension.variant, suspensionMat=mat(cfg.suspension.color,.82,.18), armRadius=.055-sv*.007;
+    [[1.95,1.55],[-2.15,1.72]].forEach(([z,wheelX])=>[-1,1].forEach(side=>{{
+      const hub=[side*wheelX,-.34,z], innerX=side*.62;
+      rodBetween(suspension,[innerX,-.28,z-.48],hub,armRadius,suspensionMat);
+      rodBetween(suspension,[innerX,-.28,z+.48],hub,armRadius,suspensionMat);
+      rodBetween(suspension,[innerX,.25,z-.30],hub,armRadius*.9,suspensionMat);
+      rodBetween(suspension,[innerX,.25,z+.30],hub,armRadius*.9,suspensionMat);
+      rodBetween(suspension,[side*.48,.48,z],hub,armRadius*.82,suspensionMat);
+      mesh(suspension,new THREE.SphereGeometry(.12,16,10),suspensionMat,hub);
+    }}));
     const engine=group('engine'), ev=cfg.engine.variant;mesh(engine,new THREE.CapsuleGeometry(.50-ev*.06,1.45-ev*.12,8,18),mat(cfg.engine.color,.65,.24),[0,.22,-1.75],[Math.PI/2,0,0]);
     const ers=group('ers'), erv=cfg.ers.variant;mesh(ers,new THREE.TorusGeometry(.30-erv*.035,.075-erv*.01,10,28+erv*8),mat(cfg.ers.color,.5,.15),[0,.68,-1.38],[Math.PI/2,0,0]);
     const descriptions={{frontWing:'앞 타이어를 눌러 코너 진입을 돕는 공기역학 부품',rearWing:'차 뒤를 눌러 코너 안정성을 만드는 부품',tyres:'트랙과 직접 맞닿아 그립을 만드는 부품',brakes:'마찰로 차량의 속도를 줄이는 부품',suspension:'바퀴가 노면을 따라가도록 돕는 부품',floor:'차 밑 공기로 다운포스를 만드는 바닥',diffuser:'바닥 공기를 뒤에서 부드럽게 확산하는 부품',engine:'차량을 앞으로 움직이는 동력을 만드는 장치',ers:'에너지를 저장했다가 가속에 사용하는 장치'}};
     const names={{frontWing:'FRONT WING',rearWing:'REAR WING',tyres:'TYRES',brakes:'BRAKES',suspension:'SUSPENSION',floor:'FLOOR',diffuser:'DIFFUSER',engine:'ENGINE',ers:'ERS',cockpit:'COCKPIT',sidepods:'SIDEPOD'}};
-    const labelPos={{frontWing:[0,.15,3.65],rearWing:[0,1.65,-3.15],tyres:[-2.2,.4,1.9],floor:[1.6,-.6,.1],diffuser:[1.4,.1,-3],engine:[0,1.2,-1.7],ers:[.8,1,-1.2],cockpit:[0,1.7,.1],sidepods:[1.65,.55,-.45]}};
-    Object.entries(labelPos).forEach(([n,p])=>{{const d=document.createElement('div');d.className='label'+(cfg[n]?.key===active?' active':'');d.textContent=names[n];const l=new CSS2DObject(d);l.position.set(...p);partGroups[n]?.add(l)}});
+    const labelPos={{frontWing:[0,.15,3.65],rearWing:[0,1.65,-3.15],tyres:[-2.2,.4,1.9],brakes:[2.15,.2,1.95],suspension:[2.0,.72,.9],floor:[1.6,-.6,.1],diffuser:[1.4,.1,-3],engine:[0,1.2,-1.7],ers:[.8,1,-1.2],cockpit:[0,1.7,.1],sidepods:[1.65,.55,-.45]}};
+    // 라벨 앵커는 발광 파츠 그룹과 분리합니다. 차량 회전만 따라가며 Glow/Pulse의 영향을 받지 않습니다.
+    const labelAnchors=new THREE.Group();car.add(labelAnchors);
+    Object.entries(labelPos).forEach(([n,p])=>{{const anchor=new THREE.Object3D();anchor.position.set(...p);labelAnchors.add(anchor);const d=document.createElement('div');d.className='label'+(cfg[n]?.key===active?' active':'');d.textContent=names[n];const l=new CSS2DObject(d);l.position.set(0,0,0);anchor.add(l)}});
     // 왼쪽에서 선택한 파츠는 차량에서도 계속 빛나도록 해 프리뷰와 위치를 연결합니다.
     const active3d=Object.keys(cfg).find(n=>cfg[n]?.key===active), activeGroup=partGroups[active3d];
     // 선택하지 않은 부분은 살짝 어둡게 하고, 선택 파츠에는 강한 발광·와이어 박스·점광원을 더합니다.
@@ -290,7 +305,7 @@ def render_part_description(active_part, parts):
     """파츠가 무슨 일을 하는지 선택 즉시 한 문장과 툴팁으로 알려 줍니다."""
     short, detail = PART_HELP[active_part]
     name = parts[active_part]["name"].upper()
-    st.markdown(f"<div class='part-role'><b>{name}</b><br><span class='hover-tip'>{html.escape(short)} ⓘ<span class='tip-box'>{html.escape(detail)}</span></span></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='part-role'><b>{name}</b><br>{html.escape(short)}</div>", unsafe_allow_html=True)
 
 
 def render_selected_part_preview(parts, selections, active_part):
@@ -369,13 +384,28 @@ def render_help_message():
 
 
 def render_part_menu(parts, active_part):
-    """왼쪽에 파츠만 크게 표시하고, 클릭한 파츠를 활성화합니다."""
+    """왼쪽 메뉴는 파츠 선택과 클릭형 물음표 설명만 담당합니다."""
     st.markdown("<div class='section-label'>01 / PARTS</div>", unsafe_allow_html=True)
     for key, data in parts.items():
-        if st.button(f"{data['icon']}   {data['name']}", key=f"menu_{key}", use_container_width=True, help=PART_HELP[key][1]):
-            st.session_state.active_part = key
-            st.query_params["part"] = key
-            st.rerun()
+        part_column, info_column = st.columns([5, 1], gap="small")
+        with part_column:
+            if st.button(f"{data['icon']}   {data['name']}", key=f"menu_{key}", use_container_width=True):
+                st.session_state.active_part = key
+                # 다른 파츠를 고르면 이전 설명창은 자연스럽게 닫습니다.
+                st.session_state.open_part_info = None
+                st.query_params["part"] = key
+                st.rerun()
+        with info_column:
+            if st.button("?", key=f"info_{key}", use_container_width=True):
+                st.session_state.open_part_info = None if st.session_state.open_part_info == key else key
+                st.rerun()
+        if st.session_state.get("open_part_info") == key:
+            short, detail = PART_HELP[key]
+            st.markdown(
+                f"<div class='part-info-box'><b>{data['name'].upper()}</b><br>"
+                f"{html.escape(short)}<br><br>{html.escape(detail)}</div>",
+                unsafe_allow_html=True,
+            )
     st.markdown(f"<div class='active-part'>SELECTED · {parts[active_part]['name'].upper()}</div>", unsafe_allow_html=True)
 
 
@@ -476,6 +506,8 @@ def main():
         st.session_state.active_part = query_part
     if "active_part" not in st.session_state:
         st.session_state.active_part = "front_wing"
+    if "open_part_info" not in st.session_state:
+        st.session_state.open_part_info = None
     if "last_changed_part" not in st.session_state:
         st.session_state.last_changed_part = None
 
