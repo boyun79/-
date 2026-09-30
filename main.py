@@ -132,7 +132,7 @@ def apply_game_css():
     :root{--bg:#080b10;--panel:#10151d;--line:#27313d;--muted:#8290a0;--red:#ff3158;--cyan:#27d6ff}
     .stApp{background:radial-gradient(circle at 52% 17%,#202a36 0,#090c11 47%,#05070a 100%);color:#eef3f8}
     .block-container{max-width:1680px;padding:1rem 1.4rem 2rem}.stApp,button{font-family:'Noto Sans KR',sans-serif}
-    h1,h2,h3,.race{font-family:'Oxanium','Noto Sans KR',sans-serif}header,#MainMenu,footer{visibility:hidden}
+    h1,h2,h3,.race{font-family:'Oxanium','Noto Sans KR',sans-serif}
     .garage-head{display:flex;align-items:center;justify-content:space-between;border-top:3px solid var(--red);border-bottom:1px solid var(--line);padding:10px 16px;background:#0c1118;margin-bottom:10px}
     .logo{font:700 25px 'Oxanium';letter-spacing:2px}.logo b{color:var(--red)}.step{font:600 11px 'Oxanium';color:#8794a3;letter-spacing:2px}
     .intro{display:flex;gap:22px;align-items:center;padding:9px 15px;margin-bottom:12px;background:#10161ed9;border:1px solid #27313d;color:#c5cfda;font-size:12px}.intro strong{color:#fff;font:700 14px 'Oxanium'}
@@ -493,7 +493,7 @@ def render_performance_panel(performance, previous_performance, differences, cha
 # -----------------------------------------------------------------------------
 def main():
     """데이터 준비 → 사용자 입력 → 계산 → 3D 및 UI 렌더링 순서로 앱을 실행합니다."""
-    st.set_page_config(page_title="F1 Physics Garage 3D", page_icon="🏁", layout="wide", initial_sidebar_state="collapsed")
+    st.set_page_config(page_title="F1 Physics Garage 3D", page_icon="🏁", layout="wide", initial_sidebar_state="expanded")
     apply_game_css()
     parts = get_part_data()
 
