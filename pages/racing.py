@@ -86,7 +86,13 @@ def build_simulation_html(car_data):
     data = {"car": car_data, "laps": TOTAL_LAPS}
     # </script> 삽입을 막고 기존 Garage 값의 JSON 구조는 그대로 유지합니다.
     payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
-    return SIMULATION_HTML.replace("__DATA__", payload).replace("__CAR_BUILDER__", BUILDER_JS)
+    metrics = "".join(
+        f"<div class='metric'><span>{html.escape(name)}</span><b>{float(car_data['performance'].get(key, 50)):.0f}</b></div>"
+        for name, key in zip(METRICS, ("downforce", "topSpeed", "cornering", "grip", "braking", "stability"))
+    )
+    return (SIMULATION_HTML.replace("__DATA__", payload)
+            .replace("__CAR_BUILDER__", BUILDER_JS)
+            .replace("__PERFORMANCE__", metrics))
 
 
 def main():
@@ -101,38 +107,33 @@ def main():
     st.markdown("<div class='head'><div class='logo'>VIRTUAL <b>RACE</b></div>"
                 "<div class='step'>MY 3D F1 CAR · TRACK TEST CIRCUIT</div></div>",
                 unsafe_allow_html=True)
-    # Streamlit 버튼으로 iframe을 교체하지 않습니다. JS 내부 버튼이 곧바로 카운트다운을 시작합니다.
-    components.html(build_simulation_html(car_data), height=530, scrolling=False)
-    st.markdown("<div class='title'>CAR PERFORMANCE</div>", unsafe_allow_html=True)
-    for name in METRICS:
-        try:
-            value = max(0, min(100, float(performance[name])))
-        except (TypeError, ValueError):
-            value = 50
-        st.markdown(
-            f"<div class='bar-row'><div class='bar-top'><span>{name}</span><span>{value:.0f}</span></div>"
-            f"<div class='bar'><i style='width:{value:.0f}%'></i></div></div>",
-            unsafe_allow_html=True,
-        )
+    # 성능도 같은 iframe 안에 배치하여 준비/주행 전환 시 함께 표시·숨김 처리합니다.
+    components.html(build_simulation_html(car_data), height=855, scrolling=False)
 
 
 SIMULATION_HTML = r'''<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071019;color:#fff;font-family:Arial,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071019;color:#fff;font-family:Arial,sans-serif} [hidden]{display:none!important}
 #game{position:relative;width:100%;height:100%;overflow:hidden;background:#071019}
 canvas{display:block;width:100%;height:100%}.hud{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .panel{position:absolute;top:12px;max-width:42%;padding:8px 12px;background:#071019dc;border:1px solid #354758;border-top:2px solid #27d6ff;font-size:11px;letter-spacing:1px}
 .panel b{font-size:clamp(16px,2.8vw,26px);white-space:nowrap}.pos{left:12px}.lap{right:12px;text-align:right}
 .speed{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#071019df;border:1px solid #354758;padding:8px 18px;font-size:clamp(14px,2.5vw,24px)}
-#overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;text-shadow:0 3px 10px #000}
+#overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;text-align:center;text-shadow:0 3px 10px #000}
 #overlay h1{margin:0;font-size:clamp(35px,8vw,88px);color:#ff3158}#overlay p{margin:6px;font-size:clamp(14px,2vw,22px)}
-#start{pointer-events:auto;cursor:pointer;margin-top:24px;padding:14px 27px;border:1px solid #ff6681;background:#e51d45;color:white;font-weight:900;font-size:17px}
-#pause{pointer-events:auto;position:absolute;right:12px;bottom:14px;cursor:pointer;background:#091725;color:#fff;border:1px solid #27d6ff;padding:8px 11px;font-weight:bold}#result{display:none;background:#08111eea;border:1px solid #ff3158;padding:20px;line-height:1.8;min-width:min(340px,85vw)}
+#start{pointer-events:auto;cursor:pointer;margin:0 0 13px;padding:14px 27px;border:1px solid #ff6681;background:#e51d45;color:white;font-weight:900;font-size:17px}
+#pause{pointer-events:auto;position:absolute;right:12px;bottom:14px;cursor:pointer;background:#091725;color:#fff;border:1px solid #27d6ff;padding:8px 11px;font-weight:bold}#previewPanels{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column}
+.previewTitle{height:31px;padding:7px 13px;background:#0b1520e8;color:#ccd6e2;font-weight:bold;font-size:13px;letter-spacing:2px}
+#trackPanel{height:315px;border:1px solid #364555}#carPanel{height:235px;border:1px solid #364555;border-top:0}
+#performancePanel{height:228px;background:#0b1520;border:1px solid #364555;padding:0 13px}
+.metric{display:flex;justify-content:space-between;padding:5px 1px;border-bottom:1px solid #263541;font-size:12px}.metric b{color:#27d6ff}
+#back{pointer-events:auto;position:absolute;right:115px;bottom:14px;cursor:pointer;background:#091725;color:#fff;border:1px solid #27d6ff;padding:8px 11px;font-weight:bold}
+#result{display:none;background:#08111eea;border:1px solid #ff3158;padding:20px;line-height:1.8;min-width:min(340px,85vw)}
 #result strong{color:#ff3158;font-size:23px}#error{position:absolute;left:12px;bottom:10px;color:#ff7186;background:#08111e}
 </style><script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.164.1/build/three.module.js"}}</script>
-</head><body><div id="game"><div class="hud" id="hud" hidden><div class="panel pos">POSITION<br><b id="position">1 / 5</b></div><div class="panel lap">LAP<br><b id="lap">1 / 3</b></div><button id="pause" hidden>⏸ PAUSE</button><div class="speed">SPEED <b id="speed">0</b> km/h</div></div>
-<div id="overlay"><p id="message">MY 3D F1 CAR · TRACK TEST CIRCUIT</p><h1 id="count"></h1><button id="start">SIMULATION START</button><div id="result"></div></div><div id="error"></div></div>
+</head><body><div id="game"><div id="previewPanels"><div id="trackPanel"><div class="previewTitle">TRACK TEST CIRCUIT</div></div><div id="carPanel"><div class="previewTitle">MY 3D F1 CAR</div></div><div id="performancePanel"><div class="previewTitle">CAR PERFORMANCE</div>__PERFORMANCE__</div></div><div class="hud" id="hud" hidden><div class="panel pos">POSITION<br><b id="position">1 / 5</b></div><div class="panel lap">LAP<br><b id="lap">1 / 3</b></div><button id="pause" hidden>⏸ PAUSE</button><div class="speed">SPEED <b id="speed">0</b> km/h</div></div><button id="back" hidden>↩ PREPARATION</button>
+<div id="overlay"><p id="message"></p><h1 id="count"></h1><button id="start">SIMULATION START</button><div id="result"></div></div><div id="error"></div></div>
 <script type="module">
 import * as THREE from 'three';
 const DATA=__DATA__,root=document.getElementById('game');
@@ -168,6 +169,8 @@ function createTrack(){
   scene.add(line);
 }
 createTrack();
+// 준비 화면의 두 뷰는 동일한 트랙 객체와 동일한 Garage 차량 객체를 번갈아 렌더링합니다.
+const trackObjects=scene.children.filter(obj=>!obj.isLight && obj!==ground);
 function score(name){let n=Number(DATA.car.performance[name]);return Number.isFinite(n)?Math.max(0,Math.min(1,n/100)):.5}
 function createPlayerCar(){let mesh=createF1Car(0xff1748,DATA.car.appearance);scene.add(mesh);return {mesh,progress:0,laps:0,speed:0,finished:false,base:1,top:0,lapStart:0,lastLap:0,best:Infinity,finishTime:Infinity}}
 function createAICars(){return [.97,1.01,.95,1.02].map((base,i)=>{let mesh=createF1Car([0x24bbfa,0xfcc935,0x8de76b,0xb277fa][i],DATA.car.appearance);scene.add(mesh);return {mesh,progress:0,laps:0,speed:0,finished:false,base,top:0,lapStart:0,lastLap:0,best:Infinity,finishTime:Infinity}})}
@@ -201,16 +204,47 @@ function updateCamera(dt){let f=frameAt(player.progress);targetCamera.copy(playe
 function updateHUD(){document.getElementById('position').textContent=rank()+' / 5';document.getElementById('lap').textContent=Math.min(3,player.laps+1)+' / 3';document.getElementById('speed').textContent=Math.round(player.speed)}
 let phase='preview',countEnd=0,startTime=0,lastFrame=performance.now(),elapsed=0,isPaused=false;
 document.getElementById('pause').addEventListener('click',()=>{if(phase!=='running')return;isPaused=!isPaused;document.getElementById('pause').textContent=isPaused?'▶ RESUME':'⏸ PAUSE'});
-function startCountdown(){if(phase!=='preview')return;phase='countdown';document.getElementById('start').hidden=true;document.getElementById('message').textContent='RACE STARTING';document.getElementById('hud').hidden=false;countEnd=performance.now()+4000}
-function startSimulation(now){ais.push(...createAICars());cars=[player,...ais];cars.forEach((car,i)=>{if(i){car.progress=1-i*.009;placeCar(car,i)}});phase='running';startTime=now;lastFrame=now;document.getElementById('pause').hidden=false;document.getElementById('count').textContent='';document.getElementById('message').textContent='';document.getElementById('overlay').style.display='none'}
-function finishSimulation(){phase='complete';document.getElementById('overlay').style.display='flex';document.getElementById('result').style.display='block';document.getElementById('result').innerHTML='<strong>SIMULATION COMPLETE</strong><br>POSITION '+rank()+' / 5<br>LAPS 3<br>TOP SPEED '+Math.round(player.top)+' km/h<br>LAP TIME '+player.lastLap.toFixed(2)+' sec<br>BEST LAP '+player.best.toFixed(2)+' sec';document.getElementById('hud').hidden=true;document.getElementById('pause').hidden=true}
+function startCountdown(){if(phase!=='preview')return;phase='countdown';document.getElementById('start').hidden=true;document.getElementById('message').textContent='RACE STARTING';document.getElementById('hud').hidden=false;document.getElementById('overlay').style.justifyContent='center';countEnd=performance.now()+4000}
+function startSimulation(now){document.getElementById('previewPanels').hidden=true;document.getElementById('back').hidden=false;ais.push(...createAICars());cars=[player,...ais];cars.forEach((car,i)=>{if(i){car.progress=1-i*.009;placeCar(car,i)}});phase='running';startTime=now;lastFrame=now;document.getElementById('pause').hidden=false;document.getElementById('count').textContent='';document.getElementById('message').textContent='';document.getElementById('overlay').style.display='none'}
+function finishSimulation(){phase='complete';document.getElementById('back').hidden=false;document.getElementById('overlay').style.display='flex';document.getElementById('result').style.display='block';document.getElementById('result').innerHTML='<strong>SIMULATION COMPLETE</strong><br>POSITION '+rank()+' / 5<br>LAPS 3<br>TOP SPEED '+Math.round(player.top)+' km/h<br>LAP TIME '+player.lastLap.toFixed(2)+' sec<br>BEST LAP '+player.best.toFixed(2)+' sec';document.getElementById('hud').hidden=true;document.getElementById('pause').hidden=true}
+function resetSimulation(){
+  ais.forEach(car=>scene.remove(car.mesh));ais.length=0;cars=[player];
+  Object.assign(player,{progress:0,laps:0,speed:0,finished:false,top:0,lapStart:0,lastLap:0,best:Infinity,finishTime:Infinity});
+  placeCar(player,0);elapsed=0;countEnd=0;isPaused=false;phase='preview';
+  document.getElementById('pause').textContent='⏸ PAUSE';document.getElementById('pause').hidden=true;
+  document.getElementById('back').hidden=true;document.getElementById('hud').hidden=true;
+  document.getElementById('previewPanels').hidden=false;document.getElementById('start').hidden=false;
+  document.getElementById('overlay').style.display='flex';document.getElementById('overlay').style.justifyContent='flex-end';document.getElementById('message').textContent='';
+  document.getElementById('result').style.display='none';document.getElementById('count').textContent='';
+  updateHUD();handleResize();
+}
 function handleResize(){let w=Math.max(root.clientWidth,1),h=Math.max(root.clientHeight,1);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(phase==='preview'){const distance=Math.max(125,125/camera.aspect);camera.position.set(-12,distance*.85,64);camera.lookAt(0,0,0)}}
-window.addEventListener('resize',handleResize);new ResizeObserver(handleResize).observe(root);handleResize();document.getElementById('start').addEventListener('click',startCountdown);
+window.addEventListener('resize',handleResize);new ResizeObserver(handleResize).observe(root);handleResize();document.getElementById('start').addEventListener('click',startCountdown);document.getElementById('back').addEventListener('click',resetSimulation);
 // requestAnimationFrame은 모든 상태에서 유지되므로 카운트다운 뒤에도 캔버스가 사라지지 않습니다.
 function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-lastFrame)/1000,.05);lastFrame=now;
   if(phase==='countdown'){let remaining=countEnd-now;document.getElementById('count').textContent=remaining>1000?String(Math.ceil((remaining-1000)/1000)):'GO';updateCamera(dt);if(remaining<=0)startSimulation(now)}
   else if(phase==='running'&&!isPaused){elapsed+=dt;updatePlayerCar(dt,elapsed);updateAICars(dt,elapsed);updateCamera(dt);updateHUD();if(player.finished)finishSimulation()}
-  renderer.render(scene,camera)}requestAnimationFrame(animate);
+  if(phase==='preview'){
+    const w=root.clientWidth,h=root.clientHeight,dpr=renderer.getPixelRatio();
+    const trackHeight=315,carHeight=235;
+    renderer.setScissorTest(true);
+    // 트랙 전용 뷰: 준비 화면에는 모든 차량을 숨깁니다.
+    cars.forEach(car=>car.mesh.visible=false);trackObjects.forEach(obj=>obj.visible=true);
+    camera.aspect=w/trackHeight;camera.updateProjectionMatrix();
+    const distance=Math.max(125,125/camera.aspect);camera.position.set(-12,distance*.85,64);camera.lookAt(0,0,0);
+    renderer.setViewport(0,(h-trackHeight)*dpr,w*dpr,trackHeight*dpr);
+    renderer.setScissor(0,(h-trackHeight)*dpr,w*dpr,trackHeight*dpr);renderer.render(scene,camera);
+    // 차량 전용 뷰: 트랙을 숨기고 동일한 player.mesh를 클로즈업합니다.
+    trackObjects.forEach(obj=>obj.visible=false);ground.visible=false;player.mesh.visible=true;
+    camera.aspect=w/carHeight;camera.updateProjectionMatrix();
+    camera.position.copy(player.mesh.position).add(new THREE.Vector3(11,8,15));
+    camera.lookAt(player.mesh.position.x,player.mesh.position.y,player.mesh.position.z);
+    renderer.setViewport(0,(h-trackHeight-carHeight)*dpr,w*dpr,carHeight*dpr);
+    renderer.setScissor(0,(h-trackHeight-carHeight)*dpr,w*dpr,carHeight*dpr);renderer.render(scene,camera);
+    renderer.setScissorTest(false);trackObjects.forEach(obj=>obj.visible=true);ground.visible=true;
+    camera.aspect=w/h;camera.updateProjectionMatrix();
+  }else{player.mesh.visible=true;renderer.setViewport(0,0,root.clientWidth*renderer.getPixelRatio(),root.clientHeight*renderer.getPixelRatio());renderer.render(scene,camera)}
+}requestAnimationFrame(animate);
 </script></body></html>'''
 
 
