@@ -50,14 +50,13 @@ def calculate_performance(config):
     return {name:round(value/count) for name,value in zip(METRICS,totals)} if count else None
 
 
+GARAGE_VISUAL_OPTIONS = {'front_wing': {'part': 'frontWing', 'options': {'low': {'color': '#27d6ff', 'shape': 0.82, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'high': {'color': '#ff3158', 'shape': 1.18, 'variant': 2}}}, 'rear_wing': {'part': 'rearWing', 'options': {'low': {'color': '#27d6ff', 'shape': 0.78, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'high': {'color': '#ff3158', 'shape': 1.25, 'variant': 2}}}, 'tyres': {'part': 'tyres', 'options': {'soft': {'color': '#ed2939', 'shape': 1.0, 'variant': 0}, 'medium': {'color': '#ffd326', 'shape': 1.0, 'variant': 1}, 'hard': {'color': '#f4f5f6', 'shape': 1.0, 'variant': 2}}}, 'brakes': {'part': 'brakes', 'options': {'race': {'color': '#ff5038', 'shape': 1.0, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'light': {'color': '#27d6ff', 'shape': 1.0, 'variant': 2}}}, 'suspension': {'part': 'suspension', 'options': {'stiff': {'color': '#ff3158', 'shape': 1.0, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'soft': {'color': '#27d6ff', 'shape': 1.0, 'variant': 2}}}, 'floor': {'part': 'floor', 'options': {'venturi': {'color': '#9a62ff', 'shape': 1.0, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'light': {'color': '#27d6ff', 'shape': 1.0, 'variant': 2}}}, 'diffuser': {'part': 'diffuser', 'options': {'large': {'color': '#9a62ff', 'shape': 1.2, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'compact': {'color': '#27d6ff', 'shape': 0.78, 'variant': 2}}}, 'engine': {'part': 'engine', 'options': {'power': {'color': '#ff3158', 'shape': 1.0, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'efficient': {'color': '#27d6ff', 'shape': 1.0, 'variant': 2}}}, 'ers': {'part': 'ers', 'options': {'attack': {'color': '#32f59b', 'shape': 1.0, 'variant': 0}, 'balanced': {'color': '#ffb21a', 'shape': 1.0, 'variant': 1}, 'recovery': {'color': '#27d6ff', 'shape': 1.0, 'variant': 2}}}}
+
 def prepare_car_data(config,performance):
     """Garage 이름을 Three.js 생성기가 사용하는 이름으로 한 번만 변환합니다."""
-    return {"appearance":{
-        "frontWing":config.get("front_wing","balanced"),"rearWing":config.get("rear_wing","balanced"),
-        "tyres":config.get("tyres","medium"),"brakes":config.get("brakes","balanced"),
-        "suspension":config.get("suspension","balanced"),"floor":config.get("floor","balanced"),
-        "diffuser":config.get("diffuser","balanced"),"engine":config.get("engine","balanced"),
-        "ers":config.get("ers","balanced")},
+    appearance = {part["part"]: part["options"].get(config.get(key), next(iter(part["options"].values())))
+                  for key, part in GARAGE_VISUAL_OPTIONS.items()}
+    return {"appearance":appearance,
         "performance":{"downforce":performance["다운포스"],"topSpeed":performance["최고속도"],
         "cornering":performance["코너링"],"grip":performance["그립"],"braking":performance["제동"],
         "stability":performance["안정성"]},"config":config}
@@ -79,7 +78,7 @@ def apply_page_style():
     </style>""",unsafe_allow_html=True)
 
 
-BUILDER_JS = '\nfunction createF1Car(color, appearance={}) {\n  const car=new THREE.Group(); car.userData.wheels=[];\n  const bodyMat=new THREE.MeshStandardMaterial({color,metalness:.72,roughness:.23});\n  const carbon=new THREE.MeshStandardMaterial({color:0x11151a,metalness:.55,roughness:.35});\n  const rubber=new THREE.MeshStandardMaterial({color:0x07080a,roughness:.82});\n  const accent=new THREE.MeshStandardMaterial({color:0x27d6ff,metalness:.65,roughness:.22});\n  function add(geometry,material,position=[0,0,0],rotation=[0,0,0],parent=car){\n    const mesh=new THREE.Mesh(geometry,material);mesh.position.set(...position);mesh.rotation.set(...rotation);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;\n  }\n  function rod(a,b,r=.035,material=carbon){const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),mid=A.clone().add(B).multiplyScalar(.5);const m=add(new THREE.CylinderGeometry(r,r,A.distanceTo(B),10),material,[mid.x,mid.y,mid.z]);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());return m}\n  // 유선형 모노코크, 노즈, 엔진 커버를 곡면 Geometry로 구성합니다.\n  add(new THREE.CapsuleGeometry(.55,2.75,8,24),bodyMat,[0,.62,0],[Math.PI/2,0,0]);\n  add(new THREE.ConeGeometry(.48,3.25,28),bodyMat,[0,.52,-2.65],[-Math.PI/2,0,0]);\n  add(new THREE.SphereGeometry(.82,28,16),bodyMat,[0,.64,1.05],[0,0,0]).scale.set(1.22,.64,1.6);\n  // 콕핏과 Halo\n  add(new THREE.SphereGeometry(.56,24,14),carbon,[0,1.02,-.05],[0,0,0]).scale.set(1,.58,1.25);\n  add(new THREE.TorusGeometry(.58,.055,10,32,Math.PI*1.35),carbon,[0,1.38,-.05],[Math.PI/2,0,.35]);\n  rod([0,1.35,.35],[0,.92,.42],.055,carbon);\n  // 사이드포드\n  [-1,1].forEach(side=>{const pod=add(new THREE.CapsuleGeometry(.38,1.25,8,18),bodyMat,[side*.78,.5,.55],[Math.PI/2,0,0]);pod.scale.set(1,.76,1.1)});\n  // 옵션별 플로어의 폭과 길이를 실제 Mesh 크기로 변경합니다.\n  const floorScale={venturi:1.12,balanced:1,light:.88}[appearance.floor]||1;\n  add(new THREE.BoxGeometry(2.25*floorScale,.10,4.65*floorScale),carbon,[0,.19,.25]);\n  // 타이어는 회전 가능한 원통과 컴파운드 색 띠로 구성됩니다.\n  const tyreRadius={soft:.53,medium:.50,hard:.47}[appearance.tyres]||.50;\n  const tyreColor={soft:0xed2939,medium:0xffd326,hard:0xf2f4f6}[appearance.tyres]||0xffd326;\n  [[-1.32,-1.55],[1.32,-1.55],[-1.43,1.42],[1.43,1.42]].forEach(([x,z],i)=>{\n    const wheel=new THREE.Group();wheel.position.set(x,.5,z);car.add(wheel);car.userData.wheels.push(wheel);\n    add(new THREE.CylinderGeometry(tyreRadius,tyreRadius,.40,28),rubber,[0,0,0],[0,0,Math.PI/2],wheel);\n    add(new THREE.TorusGeometry(tyreRadius*.98,.035,8,36),new THREE.MeshBasicMaterial({color:tyreColor}),[x<0?-.205:.205,0,0],[0,Math.PI/2,0],wheel);\n    const brakeSize={race:.34,balanced:.29,light:.25}[appearance.brakes]||.29;\n    add(new THREE.CylinderGeometry(brakeSize,brakeSize,.045,24),new THREE.MeshStandardMaterial({color:0xff5438,metalness:.8,roughness:.3}),[0,0,0],[0,0,Math.PI/2],wheel);\n  });\n  // 앞·뒤 바퀴와 차체를 연결하는 여러 개의 서스펜션 암입니다.\n  const arm={stiff:.052,balanced:.043,soft:.035}[appearance.suspension]||.043;\n  [[-1.55,1.32],[1.42,1.43]].forEach(([z,wx])=>[-1,1].forEach(side=>{const hub=[side*wx,.5,z];rod([side*.52,.44,z-.38],hub,arm);rod([side*.52,.44,z+.38],hub,arm);rod([side*.48,.92,z],hub,arm*.85)}));\n  // 프론트 윙은 옵션에 따라 폭과 플랩 수가 달라집니다.\n  const fw={low:[2.55,1],balanced:[3.05,2],high:[3.55,3]}[appearance.frontWing]||[3.05,2];\n  for(let i=0;i<fw[1];i++)add(new THREE.CapsuleGeometry(.09,fw[0],6,18),accent,[0,.27+i*.13,-4.05+i*.17],[0,0,Math.PI/2]);\n  [-1,1].forEach(side=>add(new THREE.BoxGeometry(.08,.58,.72),accent,[side*fw[0]*.51,.45,-3.9]));\n  // 리어 윙 역시 높이·폭·플랩 수가 설정에 따라 바뀝니다.\n  const rw={low:[1.85,1,.95],balanced:[2.25,2,1.18],high:[2.65,3,1.42]}[appearance.rearWing]||[2.25,2,1.18];\n  [-1,1].forEach(side=>rod([side*.72,.5,2.0],[side*.72,rw[2],2.2],.055,carbon));\n  for(let i=0;i<rw[1];i++)add(new THREE.CapsuleGeometry(.10,rw[0],6,18),accent,[0,rw[2]+i*.17,2.22-i*.08],[0,0,Math.PI/2]);\n  // 디퓨저 핀 수와 크기도 Garage 설정에 따라 달라집니다.\n  const df={large:[6,1.05],balanced:[4,.82],compact:[3,.58]}[appearance.diffuser]||[4,.82];\n  for(let i=0;i<df[0];i++){const x=-.85+i*(1.7/(df[0]-1));add(new THREE.BoxGeometry(.045,.52,df[1]),carbon,[x,.36,2.32],[.32,0,0])}\n  // 엔진과 ERS는 상부의 입체 커버·발광 링으로 표현합니다.\n  const engineScale={power:1.12,balanced:1,efficient:.88}[appearance.engine]||1;\n  const engine=add(new THREE.CapsuleGeometry(.31,1.0*engineScale,8,18),bodyMat,[0,1.03,1.12],[Math.PI/2,0,0]);\n  const ersColor={attack:0x32f59b,balanced:0xffb21a,recovery:0x27d6ff}[appearance.ers]||0xffb21a;\n  add(new THREE.TorusGeometry(.22,.045,10,26),new THREE.MeshStandardMaterial({color:ersColor,emissive:ersColor,emissiveIntensity:1.2}),[0,1.38,.82],[Math.PI/2,0,0]);\n  car.userData.rotateWheels=(amount)=>car.userData.wheels.forEach(w=>w.rotation.x-=amount);\n  return car;\n}\n'
+BUILDER_JS = "\nfunction createF1Car(color, cfg) {\n    const car=new THREE.Group(), partGroups={};\n    const mat=(color,metal=.45,rough=.32)=>new THREE.MeshStandardMaterial({color,metalness:metal,roughness:rough});\n    function group(name){const g=new THREE.Group();g.userData.part=name;partGroups[name]=g;car.add(g);return g}\n    function mesh(g,geo,material,pos=[0,0,0],rot=[0,0,0],scale=[1,1,1]){const m=new THREE.Mesh(geo,material);m.position.set(...pos);m.rotation.set(...rot);m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;m.userData.part=g.userData.part;g.add(m);return m}\n    function capsule(length,radius){return new THREE.CapsuleGeometry(radius,length,8,20)}\n    // 두 지점 사이에 실제 두께가 있는 서스펜션 암을 만드는 도우미입니다.\n    function rodBetween(g,a,b,radius,material){const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),mid=start.clone().add(end).multiplyScalar(.5),length=start.distanceTo(end);const rod=mesh(g,new THREE.CylinderGeometry(radius,radius,length,12),material,[mid.x,mid.y,mid.z]);rod.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),end.clone().sub(start).normalize());return rod}\n    // 매끈한 곡면 차체: 길쭉한 캡슐과 유선형 노즈를 겹쳐 실제 포뮬러카 실루엣을 만듭니다.\n    const body=group('body'), red=mat(color,.72,.24);mesh(body,capsule(3.1,.65),red,[0,.05,0],[Math.PI/2,0,0],[1,1,1]);mesh(body,new THREE.ConeGeometry(.62,4.5,32),red,[0,-.08,3.35],[Math.PI/2,0,0],[1,.55,1]);\n    mesh(body,new THREE.SphereGeometry(1.0,32,18),red,[0,.05,-1.35],[0,0,0],[1.35,.78,1.75]);\n    // 콕핏과 Halo\n    const cockpit=group('cockpit');mesh(cockpit,new THREE.SphereGeometry(.64,28,16,0,Math.PI*2,0,Math.PI*.62),mat(0x111820,.15,.16),[0,.65,-.25],[0,0,0],[1,.62,1.45]);\n    const haloMat=mat(0x242c35,.75,.2);mesh(cockpit,new THREE.TorusGeometry(.62,.055,10,36,Math.PI*1.25),haloMat,[0,1.08,-.05],[Math.PI/2,0,.39]);mesh(cockpit,new THREE.CylinderGeometry(.06,.06,.72,12),haloMat,[0,.82,.35],[0,0,0]);\n    // 사이드포드: 앞은 넓고 뒤로 갈수록 좁아지는 곡면\n    const side=group('sidepods');[-1,1].forEach(s=>{mesh(side,capsule(1.35,.52),red,[s*1.02,-.05,-.65],[Math.PI/2,0,0],[1,.72,1.25]);mesh(side,new THREE.ConeGeometry(.48,2.2,24),red,[s*.94,-.08,-2.0],[-Math.PI/2,0,0],[.75,1,.9])});\n    // 타이어는 실제 회전축을 가진 두꺼운 Torus 3D 메시입니다.\n    const tyres=group('tyres'), tv=cfg.tyres.variant, tyreMat=mat(0x08090b,.05,.58+tv*.1), stripe=mat(cfg.tyres.color,.15,.38);[[-1.55,1.95,.56], [1.55,1.95,.56],[-1.72,-2.15,.72],[1.72,-2.15,.72]].forEach(p=>{const [x,z,r]=p;mesh(tyres,new THREE.TorusGeometry(r,r*(.43-tv*.045),18+tv*5,42),tyreMat,[x,-.35,z],[0,Math.PI/2,0]);mesh(tyres,new THREE.TorusGeometry(r*.99,.035,8,48),stripe,[x,-.35,z],[0,Math.PI/2,0])});\n    // 프론트 윙: 날개 단면을 가진 여러 곡선형 엘리먼트\n    const fw=group('frontWing'), fwM=mat(cfg.frontWing.color,.65,.22), f=cfg.frontWing.shape;Array.from({length:2+cfg.frontWing.variant},(_,i)=>-.18+i*.22).forEach((y,i)=>mesh(fw,new THREE.CapsuleGeometry(.11,3.2*f,6,20),fwM,[0,-.58+y,3.62-i*.25],[0,0,Math.PI/2],[1,1,1]));[-1,1].forEach(s=>mesh(fw,new THREE.ExtrudeGeometry(new THREE.Shape().moveTo(0,0).lineTo(.44,.12).lineTo(.28,.65).lineTo(0,.52),{depth:.06,bevelEnabled:true,bevelSize:.025,bevelThickness:.025}),fwM,[s*1.75*f,-.88,3.35],[0,s<0?0:Math.PI,0]));\n    // 리어 윙: 선택에 따라 폭과 높이가 실제로 변합니다.\n    const rw=group('rearWing'), rwM=mat(cfg.rearWing.color,.68,.2), r=cfg.rearWing.shape;mesh(rw,new THREE.CapsuleGeometry(.16,2.55*r,6,20),rwM,[0,1.05,-3.24],[0,0,Math.PI/2]);Array.from({length:1+cfg.rearWing.variant},(_,i)=>mesh(rw,new THREE.CapsuleGeometry(.09,2.35*r,6,20),rwM,[0,.72-i*.22,-3.0+i*.08],[0,0,Math.PI/2]));[-1,1].forEach(s=>mesh(rw,new THREE.CylinderGeometry(.045,.06,1.3,10),rwM,[s*.92*r,.35,-3.05],[0,0,0]));\n    const floor=group('floor');const floorShape=new THREE.Shape().moveTo(-1.25,-2.7).lineTo(-1.25,1.4).lineTo(-.8,2.8).lineTo(.8,2.8).lineTo(1.25,1.4).lineTo(1.25,-2.7).lineTo(-1.25,-2.7);mesh(floor,new THREE.ExtrudeGeometry(floorShape,{depth:.09,bevelEnabled:true,bevelSize:.04,bevelThickness:.03}),mat(cfg.floor.color,.7,.25),[0,-.92,0],[Math.PI/2,0,0]);\n    const diffuser=group('diffuser'), dm=mat(cfg.diffuser.color,.72,.22);[-.72,-.24,.24,.72].forEach(x=>mesh(diffuser,new THREE.BoxGeometry(.055,.7,1.35*cfg.diffuser.shape),dm,[x,-.62,-3.08],[.38,0,0]));\n    const brakes=group('brakes'), bv=cfg.brakes.variant;[[-1.55,1.95],[1.55,1.95],[-1.72,-2.15],[1.72,-2.15]].forEach(p=>mesh(brakes,new THREE.CylinderGeometry(.38-bv*.055,.38-bv*.055,.07,24+bv*8),mat(cfg.brakes.color,.8,.28),[p[0],-.35,p[1]],[0,0,Math.PI/2]));\n    // 앞·뒤 바퀴 허브와 차체를 위/아래 위시본 및 푸시로드로 연결합니다.\n    const suspension=group('suspension'), sv=cfg.suspension.variant, suspensionMat=mat(cfg.suspension.color,.82,.18), armRadius=.055-sv*.007;\n    [[1.95,1.55],[-2.15,1.72]].forEach(([z,wheelX])=>[-1,1].forEach(side=>{\n      const hub=[side*wheelX,-.34,z], innerX=side*.62;\n      rodBetween(suspension,[innerX,-.28,z-.48],hub,armRadius,suspensionMat);\n      rodBetween(suspension,[innerX,-.28,z+.48],hub,armRadius,suspensionMat);\n      rodBetween(suspension,[innerX,.25,z-.30],hub,armRadius*.9,suspensionMat);\n      rodBetween(suspension,[innerX,.25,z+.30],hub,armRadius*.9,suspensionMat);\n      rodBetween(suspension,[side*.48,.48,z],hub,armRadius*.82,suspensionMat);\n      mesh(suspension,new THREE.SphereGeometry(.12,16,10),suspensionMat,hub);\n    }));\n    const engine=group('engine'), ev=cfg.engine.variant;mesh(engine,new THREE.CapsuleGeometry(.50-ev*.06,1.45-ev*.12,8,18),mat(cfg.engine.color,.65,.24),[0,.22,-1.75],[Math.PI/2,0,0]);\n    const ers=group('ers'), erv=cfg.ers.variant;mesh(ers,new THREE.TorusGeometry(.30-erv*.035,.075-erv*.01,10,28+erv*8),mat(cfg.ers.color,.5,.15),[0,.68,-1.38],[Math.PI/2,0,0]);\n\n  return car;\n}\n"
 
 
 def build_simulation_html(car_data):
@@ -103,27 +102,18 @@ def main():
                 "<div class='step'>MY 3D F1 CAR · TRACK TEST CIRCUIT</div></div>",
                 unsafe_allow_html=True)
     # Streamlit 버튼으로 iframe을 교체하지 않습니다. JS 내부 버튼이 곧바로 카운트다운을 시작합니다.
-    components.html(build_simulation_html(car_data), height=650, scrolling=False)
-    left, right = st.columns([1.6, 1])
-    with left:
-        chips = "".join(
-            f"<span>{html.escape(str(k).replace('_', ' ').upper())} · {html.escape(str(v).upper())}</span>"
-            for k, v in config.items()
+    components.html(build_simulation_html(car_data), height=530, scrolling=False)
+    st.markdown("<div class='title'>CAR PERFORMANCE</div>", unsafe_allow_html=True)
+    for name in METRICS:
+        try:
+            value = max(0, min(100, float(performance[name])))
+        except (TypeError, ValueError):
+            value = 50
+        st.markdown(
+            f"<div class='bar-row'><div class='bar-top'><span>{name}</span><span>{value:.0f}</span></div>"
+            f"<div class='bar'><i style='width:{value:.0f}%'></i></div></div>",
+            unsafe_allow_html=True,
         )
-        st.markdown(f"<div class='title'>GARAGE SETUP</div><div class='chips'>{chips}</div>",
-                    unsafe_allow_html=True)
-    with right:
-        st.markdown("<div class='title'>CAR PERFORMANCE</div>", unsafe_allow_html=True)
-        for name in METRICS:
-            try:
-                value = max(0, min(100, float(performance[name])))
-            except (TypeError, ValueError):
-                value = 50
-            st.markdown(
-                f"<div class='bar-row'><div class='bar-top'><span>{name}</span><span>{value:.0f}</span></div>"
-                f"<div class='bar'><i style='width:{value:.0f}%'></i></div></div>",
-                unsafe_allow_html=True,
-            )
 
 
 SIMULATION_HTML = r'''<!doctype html><html lang="ko"><head><meta charset="utf-8">
@@ -138,10 +128,10 @@ canvas{display:block;width:100%;height:100%}.hud{position:absolute;inset:0;point
 #overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;text-shadow:0 3px 10px #000}
 #overlay h1{margin:0;font-size:clamp(35px,8vw,88px);color:#ff3158}#overlay p{margin:6px;font-size:clamp(14px,2vw,22px)}
 #start{pointer-events:auto;cursor:pointer;margin-top:24px;padding:14px 27px;border:1px solid #ff6681;background:#e51d45;color:white;font-weight:900;font-size:17px}
-#result{display:none;background:#08111eea;border:1px solid #ff3158;padding:20px;line-height:1.8;min-width:min(340px,85vw)}
+#pause{pointer-events:auto;position:absolute;right:12px;bottom:14px;cursor:pointer;background:#091725;color:#fff;border:1px solid #27d6ff;padding:8px 11px;font-weight:bold}#result{display:none;background:#08111eea;border:1px solid #ff3158;padding:20px;line-height:1.8;min-width:min(340px,85vw)}
 #result strong{color:#ff3158;font-size:23px}#error{position:absolute;left:12px;bottom:10px;color:#ff7186;background:#08111e}
 </style><script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.164.1/build/three.module.js"}}</script>
-</head><body><div id="game"><div class="hud" id="hud" hidden><div class="panel pos">POSITION<br><b id="position">1 / 5</b></div><div class="panel lap">LAP<br><b id="lap">1 / 3</b></div><div class="speed">SPEED <b id="speed">0</b> km/h</div></div>
+</head><body><div id="game"><div class="hud" id="hud" hidden><div class="panel pos">POSITION<br><b id="position">1 / 5</b></div><div class="panel lap">LAP<br><b id="lap">1 / 3</b></div><button id="pause" hidden>⏸ PAUSE</button><div class="speed">SPEED <b id="speed">0</b> km/h</div></div>
 <div id="overlay"><p id="message">MY 3D F1 CAR · TRACK TEST CIRCUIT</p><h1 id="count"></h1><button id="start">SIMULATION START</button><div id="result"></div></div><div id="error"></div></div>
 <script type="module">
 import * as THREE from 'three';
@@ -180,19 +170,21 @@ function createTrack(){
 createTrack();
 function score(name){let n=Number(DATA.car.performance[name]);return Number.isFinite(n)?Math.max(0,Math.min(1,n/100)):.5}
 function createPlayerCar(){let mesh=createF1Car(0xff1748,DATA.car.appearance);scene.add(mesh);return {mesh,progress:0,laps:0,speed:0,finished:false,base:1,top:0,lapStart:0,lastLap:0,best:Infinity,finishTime:Infinity}}
-function createAICars(){return [0.91,0.96,0.88,1.00].map((base,i)=>{let mesh=createF1Car([0x24bbfa,0xfcc935,0x8de76b,0xb277fa][i],DATA.car.appearance);scene.add(mesh);return {mesh,progress:0,laps:0,speed:0,finished:false,base,top:0,lapStart:0,lastLap:0,best:Infinity,finishTime:Infinity}})}
-const player=createPlayerCar(),ais=createAICars(),cars=[player,...ais];
+function createAICars(){return [.97,1.01,.95,1.02].map((base,i)=>{let mesh=createF1Car([0x24bbfa,0xfcc935,0x8de76b,0xb277fa][i],DATA.car.appearance);scene.add(mesh);return {mesh,progress:0,laps:0,speed:0,finished:false,base,top:0,lapStart:0,lastLap:0,best:Infinity,finishTime:Infinity}})}
+const player=createPlayerCar(),ais=[];let cars=[player];
 // 차량은 출발선 근처 5열 그리드에 놓되, 선수차는 정확히 출발선 위에 둡니다.
-function placeCar(car,index){const f=frameAt(car.progress),offset=index===0?0:(index%2? -2.2:2.2);car.mesh.position.copy(f.p).addScaledVector(f.side,offset);car.mesh.position.y=.10;car.mesh.rotation.y=Math.atan2(-f.v.x,-f.v.z)}
+function placeCar(car,index){const f=frameAt(car.progress),offset=index===0?0:(index%2? -2.2:2.2);car.mesh.position.copy(f.p).addScaledVector(f.side,offset);car.mesh.position.y=1.20;car.mesh.rotation.y=Math.atan2(-f.v.x,-f.v.z)+Math.PI}
 cars.forEach((car,i)=>{car.progress=i===0?0:1-i*.009;placeCar(car,i)});
 // 랩 완주 전 코너 반경을 미리 읽어 자연스럽게 감속하고 탈출할 때 가속합니다.
 function cornerSeverity(t){let a=curve.getTangentAt((t+.012)%1),b=curve.getTangentAt((t+.035)%1);return Math.min(1,a.angleTo(b)*5.0)}
 function updateCar(car,dt,elapsed,index){if(car.finished)return;
-  const isPlayer=index===0,turn=cornerSeverity(car.progress),top=isPlayer?235+score('topSpeed')*95:270*car.base;
-  const corner=isPlayer?.48+.22*score('cornering')+.13*score('downforce')+.10*score('grip'):.73;
+  const isPlayer=index===0,turn=cornerSeverity(car.progress),playerTop=235+score('topSpeed')*95,top=isPlayer?playerTop:playerTop*car.base;
+  const playerCorner=.48+.22*score('cornering')+.13*score('downforce')+.10*score('grip');
+  const corner=isPlayer?playerCorner:Math.min(.94,playerCorner+.025);
   const target=top*(1-turn*(1-corner));
-  const brake=isPlayer?2.1+score('braking')*5:4.4,accel=isPlayer?1.1+score('grip')*1.4:1.8;
-  const stability=isPlayer?.5+score('stability')*.5:.8;
+  const playerBrake=2.1+score('braking')*5,playerAccel=1.1+score('grip')*1.4;
+  const brake=isPlayer?playerBrake:playerBrake,accel=isPlayer?playerAccel:playerAccel;
+  const stability=.5+score('stability')*.5;
   car.speed+= (target-car.speed)*(1-Math.exp(-(target<car.speed?brake:accel)*stability*dt));
   car.top=Math.max(car.top,car.speed);
   // 시간·거리 일관성: km/h → m/s → 정규화된 트랙 거리.
@@ -207,16 +199,17 @@ function rank(){let distance=c=>c.finished?DATA.laps+1+(100000-c.finishTime)*.00
 const targetCamera=new THREE.Vector3();
 function updateCamera(dt){let f=frameAt(player.progress);targetCamera.copy(player.mesh.position).addScaledVector(f.v,-16).add(new THREE.Vector3(0,8,0));camera.position.lerp(targetCamera,1-Math.exp(-4*dt));camera.lookAt(player.mesh.position.x,1,player.mesh.position.z)}
 function updateHUD(){document.getElementById('position').textContent=rank()+' / 5';document.getElementById('lap').textContent=Math.min(3,player.laps+1)+' / 3';document.getElementById('speed').textContent=Math.round(player.speed)}
-let phase='preview',countEnd=0,startTime=0,lastFrame=performance.now(),elapsed=0;
+let phase='preview',countEnd=0,startTime=0,lastFrame=performance.now(),elapsed=0,isPaused=false;
+document.getElementById('pause').addEventListener('click',()=>{if(phase!=='running')return;isPaused=!isPaused;document.getElementById('pause').textContent=isPaused?'▶ RESUME':'⏸ PAUSE'});
 function startCountdown(){if(phase!=='preview')return;phase='countdown';document.getElementById('start').hidden=true;document.getElementById('message').textContent='RACE STARTING';document.getElementById('hud').hidden=false;countEnd=performance.now()+4000}
-function startSimulation(now){phase='running';startTime=now;lastFrame=now;document.getElementById('count').textContent='';document.getElementById('message').textContent='';document.getElementById('overlay').style.display='none'}
-function finishSimulation(){phase='complete';document.getElementById('overlay').style.display='flex';document.getElementById('result').style.display='block';document.getElementById('result').innerHTML='<strong>SIMULATION COMPLETE</strong><br>POSITION '+rank()+' / 5<br>LAPS 3<br>TOP SPEED '+Math.round(player.top)+' km/h<br>LAP TIME '+player.lastLap.toFixed(2)+' sec<br>BEST LAP '+player.best.toFixed(2)+' sec';document.getElementById('hud').hidden=true}
-function handleResize(){let w=Math.max(root.clientWidth,1),h=Math.max(root.clientHeight,1);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(phase==='preview'){const distance=Math.max(125,125/camera.aspect);camera.position.set(0,distance,2);camera.lookAt(0,0,0)}}
+function startSimulation(now){ais.push(...createAICars());cars=[player,...ais];cars.forEach((car,i)=>{if(i){car.progress=1-i*.009;placeCar(car,i)}});phase='running';startTime=now;lastFrame=now;document.getElementById('pause').hidden=false;document.getElementById('count').textContent='';document.getElementById('message').textContent='';document.getElementById('overlay').style.display='none'}
+function finishSimulation(){phase='complete';document.getElementById('overlay').style.display='flex';document.getElementById('result').style.display='block';document.getElementById('result').innerHTML='<strong>SIMULATION COMPLETE</strong><br>POSITION '+rank()+' / 5<br>LAPS 3<br>TOP SPEED '+Math.round(player.top)+' km/h<br>LAP TIME '+player.lastLap.toFixed(2)+' sec<br>BEST LAP '+player.best.toFixed(2)+' sec';document.getElementById('hud').hidden=true;document.getElementById('pause').hidden=true}
+function handleResize(){let w=Math.max(root.clientWidth,1),h=Math.max(root.clientHeight,1);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(phase==='preview'){const distance=Math.max(125,125/camera.aspect);camera.position.set(-12,distance*.85,64);camera.lookAt(0,0,0)}}
 window.addEventListener('resize',handleResize);new ResizeObserver(handleResize).observe(root);handleResize();document.getElementById('start').addEventListener('click',startCountdown);
 // requestAnimationFrame은 모든 상태에서 유지되므로 카운트다운 뒤에도 캔버스가 사라지지 않습니다.
 function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-lastFrame)/1000,.05);lastFrame=now;
   if(phase==='countdown'){let remaining=countEnd-now;document.getElementById('count').textContent=remaining>1000?String(Math.ceil((remaining-1000)/1000)):'GO';updateCamera(dt);if(remaining<=0)startSimulation(now)}
-  else if(phase==='running'){elapsed=(now-startTime)/1000;updatePlayerCar(dt,elapsed);updateAICars(dt,elapsed);updateCamera(dt);updateHUD();if(player.finished)finishSimulation()}
+  else if(phase==='running'&&!isPaused){elapsed+=dt;updatePlayerCar(dt,elapsed);updateAICars(dt,elapsed);updateCamera(dt);updateHUD();if(player.finished)finishSimulation()}
   renderer.render(scene,camera)}requestAnimationFrame(animate);
 </script></body></html>'''
 
